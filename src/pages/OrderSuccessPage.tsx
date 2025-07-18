@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react"
+import  { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { CheckCircle, Home } from 'lucide-react'
 import { useCart } from "../hooks/useCart"
 import { useSelector } from "react-redux"
-import type { RootState } from "@reduxjs/toolkit/query"
+import type { RootState } from '../redux/store';
 
 export default function OrderSuccessPage() {
   const [orderToken, setOrderToken] = useState<string>("")

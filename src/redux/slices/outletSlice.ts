@@ -21,7 +21,7 @@ const outletSlice = createSlice({
   name: "outlet",
   initialState,
   reducers: {
-    setOutlet: (state, action: PayloadAction<OutletState>) => {
+    setOutlet: (_, action: PayloadAction<OutletState>) => {
       return action.payload;
     },
     clearOutlet: () => initialState,

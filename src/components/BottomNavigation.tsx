@@ -1,8 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom"
-import { Home, ShoppingCart, Clock, UtensilsCrossed, Play } from 'lucide-react'
+import { Home, ShoppingCart, Clock, UtensilsCrossed } from 'lucide-react'
 import { useSelector } from "react-redux"
-import type { RootState } from "@reduxjs/toolkit/query"
-
+import type { RootState } from '../redux/store';
 export default function BottomNavigation() {
   const navigate = useNavigate()
   const location = useLocation()

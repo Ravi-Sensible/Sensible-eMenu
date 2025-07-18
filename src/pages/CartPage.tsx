@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Minus, Plus, Trash2 } from "lucide-react";
 import MobileNumberPopup from "../components/MobileNumberPopup";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "@reduxjs/toolkit/query";
+import type { RootState } from '../redux/store';
 import { removeFromCart, updateQuantity } from "../redux/slices/cartSlice";
 
 export default function CartPage() {

@@ -1,4 +1,4 @@
-import React from "react"
+
 import { Plus, Minus } from 'lucide-react'
 import type { MenuItem } from "../types"
 
@@ -15,15 +15,15 @@ export default function MenuItemCard({ item, quantity, onAddToCart, onUpdateQuan
       <div className="flex space-x-4">
         <div className="flex-1">
           <h3 className="font-semibold text-lg mb-1">{item.name}</h3>
-          {item.description && <p className="text-gray-600 text-sm mb-2">{item.description}</p>}
+          {/* {item.description && <p className="text-gray-600 text-sm mb-2">{item.description}</p>} */}
           <p className="text-orange-600 font-bold text-lg">Rs.{item.price.toFixed(2)}</p>
         </div>
 
-        {item.image && (
+        {/* {item.image && (
           <div className="w-20 h-20 flex-shrink-0 bg-gray-200 rounded-lg flex items-center justify-center">
             <span className="text-2xl">🍽️</span>
           </div>
-        )}
+        )} */}
       </div>
 
       <div className="mt-4 flex justify-end">

@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import splashLogo from "../assets/splashLogo.png";
-import type { RootState } from "@reduxjs/toolkit/query";
+import type { RootState } from '../redux/store';
 import { useSelector } from "react-redux";
 export default function BootstrapPage() {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded,] = useState(false);
   const navigate = useNavigate();
 
   const outlet = useSelector((state: RootState) => state.outlet)
+  
   useEffect(() => {
     if (outlet.id) {
       const timer = setTimeout(() => {

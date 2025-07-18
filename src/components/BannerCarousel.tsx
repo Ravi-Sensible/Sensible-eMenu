@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { banners } from "../utils/dummyData"
 
 export default function BannerCarousel() {

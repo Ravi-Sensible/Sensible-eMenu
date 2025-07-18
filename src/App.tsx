@@ -11,7 +11,6 @@ import CartPage from './pages/CartPage'
 import PaymentPage from './pages/PaymentPage'
 import OrderSuccessPage from './pages/OrderSuccessPage'
 import OrdersPage from './pages/OrdersPage'
-import DemoPage from './pages/DemoPage'
 import OutletLoader from './components/OutletLoader'
 
 function App() {

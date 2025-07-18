@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   CreditCard,
   Smartphone,
-  Banknote,
-  Flag,
+  Banknote
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "@reduxjs/toolkit/query";
+import type { RootState } from '../redux/store';
 import { v4 as uuidv4 } from "uuid"; // for generating order IDs
 import dayjs from "dayjs"; // optional, for formatting
 import { addDoc, collection, doc } from "firebase/firestore";

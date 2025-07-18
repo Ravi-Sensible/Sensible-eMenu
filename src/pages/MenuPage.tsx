@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import  { useState, useEffect } from "react";
+import {useNavigate } from "react-router-dom";
 import { doc, collection, getDoc, getDocs } from "firebase/firestore";
 import Header from "../components/Header";
 import BannerCarousel from "../components/BannerCarousel";
@@ -7,7 +7,7 @@ import CategorySlider from "../components/CategorySlider";
 import MenuItemCard from "../components/MenuItemCard";
 import type { MenuItem } from "../types";
 import { db } from "../lib/firebase";
-import type { RootState } from "@reduxjs/toolkit/query";
+import type { RootState } from '../redux/store';
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart, updateQuantity } from "../redux/slices/cartSlice";
 
