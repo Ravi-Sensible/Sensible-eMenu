@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { CheckCircle, Home } from 'lucide-react'
 import { useCart } from "../hooks/useCart"
+import { useSelector } from "react-redux"
+import type { RootState } from "@reduxjs/toolkit/query"
 
 export default function OrderSuccessPage() {
   const [orderToken, setOrderToken] = useState<string>("")
+    const outlet = useSelector((state: RootState) => state.outlet)
   const { cart, clearCart } = useCart()
   const navigate = useNavigate()
 
@@ -65,14 +68,14 @@ export default function OrderSuccessPage() {
 
         <div className="space-y-4">
           <button
-            onClick={() => navigate("/menu")}
+            onClick={() =>  navigate(`/${outlet.id}`)}
             className="w-full bg-orange-500 text-white py-3 rounded-lg font-semibold"
           >
             Order Again
           </button>
 
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate(`/${outlet.id}`)}
             className="w-full bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold flex items-center justify-center space-x-2"
           >
             <Home className="w-5 h-5" />

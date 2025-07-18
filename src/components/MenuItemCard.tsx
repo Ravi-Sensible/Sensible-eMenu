@@ -16,7 +16,7 @@ export default function MenuItemCard({ item, quantity, onAddToCart, onUpdateQuan
         <div className="flex-1">
           <h3 className="font-semibold text-lg mb-1">{item.name}</h3>
           {item.description && <p className="text-gray-600 text-sm mb-2">{item.description}</p>}
-          <p className="text-orange-600 font-bold text-lg">${item.price.toFixed(2)}</p>
+          <p className="text-orange-600 font-bold text-lg">Rs.{item.price.toFixed(2)}</p>
         </div>
 
         {item.image && (

@@ -13,7 +13,7 @@ export default function CategorySlider({ categories, selectedCategory, onCategor
       <div className="flex space-x-3 pb-2">
         {categories.map((category) => (
           <button
-            key={category.id}
+            key={category.name}
             onClick={() => onCategorySelect(category.id)}
             className={`flex-shrink-0 px-4 py-2 rounded-full font-medium transition-colors ${
               selectedCategory === category.id

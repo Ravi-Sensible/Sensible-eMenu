@@ -1,18 +1,19 @@
 import { useLocation, useNavigate } from "react-router-dom"
 import { Home, ShoppingCart, Clock, UtensilsCrossed, Play } from 'lucide-react'
-import { useCart } from "../hooks/useCart"
+import { useSelector } from "react-redux"
+import type { RootState } from "@reduxjs/toolkit/query"
 
 export default function BottomNavigation() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { cart } = useCart()
-
+  const cart = useSelector((state: RootState) => state.cart.items)
+const outlet = useSelector((state: RootState) => state.outlet)
   const navItems = [
-    { id: "home", label: "Home", icon: Home, path: "/" },
-    { id: "menu", label: "Menu", icon: UtensilsCrossed, path: "/menu" },
-    { id: "cart", label: "Cart", icon: ShoppingCart, path: "/cart", badge: cart.length },
-    { id: "orders", label: "Orders", icon: Clock, path: "/orders" },
-    { id: "demo", label: "Demo", icon: Play, path: "/demo" },
+    { id: "home", label: "Home", icon: Home, path: `/${outlet.id}` },
+    { id: "menu", label: "Menu", icon: UtensilsCrossed, path:  `/${outlet.id}/menu` },
+    { id: "cart", label: "Cart", icon: ShoppingCart, path: `/${outlet.id}/cart`, badge: cart.length },
+    { id: "orders", label: "Orders", icon: Clock, path: `/${outlet.id}/orders`},
+    // { id: "demo", label: "Demo", icon: Play, path: "/demo" },
   ]
 
   const handleNavigation = (path: string) => {
