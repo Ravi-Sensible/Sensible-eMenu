@@ -16,7 +16,7 @@ export default function MenuPage() {
       const outletId=outlet?.id
   // const { outletId = "6QDWpN5HHvAbN7OwSyRz" } = useParams();
   const navigate = useNavigate();
-
+ const tableNo = localStorage.getItem("tableNo");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [loading, setLoading] = useState(true);
@@ -127,7 +127,7 @@ export default function MenuPage() {
       />
 
       <main className="pb-20">
-        <BannerCarousel />
+        {/* <BannerCarousel /> */}
 
         <div className="px-4 py-4">
           <CategorySlider
@@ -155,7 +155,7 @@ export default function MenuPage() {
       {cart.length > 0 && (
         <div className="fixed bottom-16 left-4 right-4 z-40">
           <button
-            onClick={() => navigate(`/${outletId}/cart`)}
+            onClick={() => navigate(`/${outletId}/${tableNo}/cart`)}
             className="w-full bg-orange-500 text-white py-3 px-4 rounded-lg font-semibold shadow-lg flex items-center justify-between"
           >
             <span>View Cart ({cart.length} items)</span>

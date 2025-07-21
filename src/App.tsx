@@ -19,7 +19,7 @@ function App() {
       <Router>
       <div className="App">
       <Routes>
-        <Route path="/:outletId" element={<OutletLoader />}>
+        <Route path="/:outletId/:tableNo" element={<OutletLoader />}>
           <Route index element={<BootstrapPage />} />
           <Route path="menu" element={<MenuPage />} />
           <Route path="cart" element={<CartPage />} />

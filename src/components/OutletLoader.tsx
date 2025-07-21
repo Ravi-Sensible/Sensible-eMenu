@@ -7,9 +7,11 @@ import { db } from "../lib/firebase";
 import { setOutlet } from "../redux/slices/outletSlice";
 
 export default function OutletLoader() {
-  const { outletId } = useParams<{ outletId: string }>();
+  const { outletId,tableNo } = useParams<{ outletId: string,tableNo: string }>();
   const dispatch = useDispatch();
-
+  if (tableNo!=null) {
+      localStorage.setItem("tableNo", tableNo);
+    }
   useEffect(() => {
     if (!outletId) return;
 
@@ -20,6 +22,10 @@ export default function OutletLoader() {
         dispatch(setOutlet({
             id: outletId, ...snap.data(),
         }));
+        const outletInfo={
+            id: outletId, ...snap.data(),
+        }
+        console.log(outletInfo)
       } else {
         console.warn("Outlet not found:", outletId);
       }

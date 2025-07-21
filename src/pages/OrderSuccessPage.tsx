@@ -7,6 +7,7 @@ import type { RootState } from '../redux/store';
 
 export default function OrderSuccessPage() {
   const [orderToken, setOrderToken] = useState<string>("")
+   const tableNo = localStorage.getItem("tableNo");
     const outlet = useSelector((state: RootState) => state.outlet)
   const { cart, clearCart } = useCart()
   const navigate = useNavigate()
@@ -62,20 +63,20 @@ export default function OrderSuccessPage() {
 
         <div className="bg-orange-50 rounded-lg p-4 mb-6">
           <h2 className="text-lg font-semibold text-orange-800 mb-2">Order Token</h2>
-          <div className="text-3xl font-bold text-orange-600">{orderToken}</div>
+          <div className="text-3xl font-bold text-orange-600">{orderToken} on {tableNo?.toLocaleUpperCase()}</div>
           <p className="text-sm text-orange-700 mt-2">Please save this token for order tracking</p>
         </div>
 
         <div className="space-y-4">
           <button
-            onClick={() =>  navigate(`/${outlet.id}`)}
+            onClick={() =>  navigate(`/${outlet.id}/${tableNo}`)}
             className="w-full bg-orange-500 text-white py-3 rounded-lg font-semibold"
           >
             Order Again
           </button>
 
           <button
-            onClick={() => navigate(`/${outlet.id}`)}
+            onClick={() => navigate(`/${outlet.id}/${tableNo}`)}
             className="w-full bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold flex items-center justify-center space-x-2"
           >
             <Home className="w-5 h-5" />

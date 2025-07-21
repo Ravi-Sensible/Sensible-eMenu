@@ -5,13 +5,14 @@ import type { RootState } from '../redux/store';
 export default function BottomNavigation() {
   const navigate = useNavigate()
   const location = useLocation()
+   const tableNo = localStorage.getItem("tableNo");
   const cart = useSelector((state: RootState) => state.cart.items)
 const outlet = useSelector((state: RootState) => state.outlet)
   const navItems = [
-    { id: "home", label: "Home", icon: Home, path: `/${outlet.id}` },
-    { id: "menu", label: "Menu", icon: UtensilsCrossed, path:  `/${outlet.id}/menu` },
-    { id: "cart", label: "Cart", icon: ShoppingCart, path: `/${outlet.id}/cart`, badge: cart.length },
-    { id: "orders", label: "Orders", icon: Clock, path: `/${outlet.id}/orders`},
+    { id: "home", label: "Home", icon: Home, path: `/${outlet.id}/${tableNo}` },
+    { id: "menu", label: "Menu", icon: UtensilsCrossed, path:  `/${outlet.id}/${tableNo}/menu` },
+    { id: "cart", label: "Cart", icon: ShoppingCart, path: `/${outlet.id}/${tableNo}/cart`, badge: cart.length },
+    { id: "orders", label: "Orders", icon: Clock, path: `/${outlet.id}/${tableNo}/orders`},
     // { id: "demo", label: "Demo", icon: Play, path: "/demo" },
   ]
 

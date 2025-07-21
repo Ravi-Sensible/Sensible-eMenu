@@ -10,7 +10,8 @@ export default function CartPage() {
   const cart = useSelector((state: RootState) => state.cart.items);
   const outlet = useSelector((state: RootState) => state.outlet);
   const dispatch = useDispatch();
-
+ const tableNo = localStorage.getItem("tableNo");
+ 
   const [showMobilePopup, setShowMobilePopup] = useState(false);
   const navigate = useNavigate();
 
@@ -24,14 +25,14 @@ export default function CartPage() {
     if (!savedMobile) {
       setShowMobilePopup(true);
     } else {
-      navigate(`/${outlet.id}/payment`);
+      navigate(`/${outlet.id}/${tableNo}/payment`);
     }
   };
 
   const handleMobileSubmit = (mobile: string) => {
     localStorage.setItem("customerMobile", mobile);
     setShowMobilePopup(false);
-    navigate(`/${outlet.id}/payment`);
+    navigate(`/${outlet.id}/${tableNo}/payment`);
   };
 
   if (cart.length === 0) {
@@ -53,7 +54,7 @@ export default function CartPage() {
             Add some delicious items to get started
           </p>
           <button
-            onClick={() => navigate("/menu")}
+            onClick={() => navigate(`/${outlet.id}/${tableNo}/menu`)}
             className="bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold"
           >
             Browse Menu

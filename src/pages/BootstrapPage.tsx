@@ -6,13 +6,13 @@ import { useSelector } from "react-redux";
 export default function BootstrapPage() {
   const [isLoaded,] = useState(false);
   const navigate = useNavigate();
-
+ const tableNo = localStorage.getItem("tableNo");
   const outlet = useSelector((state: RootState) => state.outlet)
   
   useEffect(() => {
-    if (outlet.id) {
+    if (outlet.id && tableNo) {
       const timer = setTimeout(() => {
-        navigate(`/${outlet.id}/menu`);
+        navigate(`/${outlet.id}/${tableNo}/menu`);
       }, 1000);
 
       return () => clearTimeout(timer);

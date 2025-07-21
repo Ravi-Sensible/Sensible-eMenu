@@ -2,9 +2,13 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Clock, CheckCircle, Package } from 'lucide-react'
 import type { Order } from "../types"
+import { useSelector } from "react-redux"
+import type { RootState } from "../redux/store"
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([])
+   const outlet = useSelector((state: RootState) => state.outlet)
+    const tableNo = localStorage.getItem("tableNo");
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -51,7 +55,7 @@ export default function OrdersPage() {
           <h2 className="text-xl font-semibold mb-2">No orders yet</h2>
           <p className="text-gray-600 text-center mb-6">Your order history will appear here</p>
           <button
-            onClick={() => navigate("/menu")}
+            onClick={() => navigate(`/${outlet.id}/${tableNo}/menu`)}
             className="bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold"
           >
             Start Ordering

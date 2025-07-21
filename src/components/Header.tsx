@@ -12,6 +12,7 @@ interface HeaderProps {
 }
 
 export default function Header({ searchQuery, setSearchQuery,outlet }: HeaderProps) {
+   const tableNo = localStorage.getItem("tableNo");
   return (
     <header className="bg-white shadow-sm sticky top-0 z-40">
       <div className="px-4 py-4">
@@ -22,6 +23,9 @@ export default function Header({ searchQuery, setSearchQuery,outlet }: HeaderPro
               <MapPin className="w-4 h-4 mr-1" />
               <span>{outlet?.branch}</span>
             </div>
+          </div>
+          <div className='font-bold text-2xl'>
+            {tableNo?.toLocaleUpperCase()}
           </div>
           <div className="text-right">
             <div className="text-sm text-green-600 font-semibold">Open</div>
