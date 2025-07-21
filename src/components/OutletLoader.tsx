@@ -22,9 +22,9 @@ export default function OutletLoader() {
         dispatch(setOutlet({
             id: outletId, ...snap.data(),
         }));
-        const outletInfo={
-            id: outletId, ...snap.data(),
-        }
+        // const outletInfo={
+        //     id: outletId, ...snap.data(),
+        // }
         // console.log(outletInfo)
       } else {
         console.warn("Outlet not found:", outletId);
