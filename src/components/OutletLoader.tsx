@@ -25,7 +25,7 @@ export default function OutletLoader() {
         const outletInfo={
             id: outletId, ...snap.data(),
         }
-        console.log(outletInfo)
+        // console.log(outletInfo)
       } else {
         console.warn("Outlet not found:", outletId);
       }

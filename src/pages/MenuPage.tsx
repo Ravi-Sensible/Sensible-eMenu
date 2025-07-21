@@ -85,7 +85,7 @@ export default function MenuPage() {
         ? item.name.toLowerCase().includes(searchQuery.toLowerCase())
         : true
     );
-console.log(filteredItems)
+// console.log(filteredItems)
   const getItemQuantity = (itemId: string) =>
     cart.find((item) => item.id === itemId)?.quantity || 0;
 
