@@ -1,13 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  ArrowLeft,
-  CreditCard,
-  Smartphone,
-  Banknote
-} from "lucide-react";
+import { ArrowLeft, CreditCard, Smartphone, Banknote } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from '../redux/store';
+import type { RootState } from "../redux/store";
 import { v4 as uuidv4 } from "uuid"; // for generating order IDs
 import dayjs from "dayjs"; // optional, for formatting
 import { addDoc, collection, doc } from "firebase/firestore";
@@ -40,9 +35,9 @@ export default function PaymentPage() {
   const cart = useSelector((state: RootState) => state.cart.items);
   const outlet = useSelector((state: RootState) => state.outlet);
   const [loading, setLoading] = useState(false);
-   const tableNo = localStorage.getItem("tableNo");
+  const tableNo = localStorage.getItem("tableNo");
   const navigate = useNavigate();
- const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const totalAmount = cart.reduce(
     (total, item) => total + item.price * item.quantity,
     0
@@ -181,155 +176,159 @@ export default function PaymentPage() {
   //   }
   // };
 
-
   const handleSaveCaptainOrder = async () => {
+    // Remove 'table' prefix if your tableNo format is 'table6'
+    let tableNumberOnly = tableNo;
+    if (tableNo && tableNo.startsWith("table")) {
+      tableNumberOnly = tableNo.replace(/^table/i, "");
+    }
 
+    const now = Date.now();
+    const billId = now;
+    const groupID = tableNumberOnly; // set as per business logic
+    const captainTabId = "4zqeYYHPoEpQ6CADLgsI";
+    const serailNo = uuidv4().replace(/-/g, "").slice(0, 16); // Example serial number, unique
+    const userId = "bev6xlEqb8ZkaHs44S3KTRORDXu1"; // or your session/user data
 
-  // Remove 'table' prefix if your tableNo format is 'table6'
-  let tableNumberOnly = tableNo;
-  if (tableNo && tableNo.startsWith("table")) {
-    tableNumberOnly = tableNo.replace(/^table/i, "");
-  }
-
-  const now = Date.now();
-  const billId = now;
-  const groupID = tableNumberOnly; // set as per business logic
-  const captainTabId = "4zqeYYHPoEpQ6CADLgsI";
-  const serailNo = uuidv4().replace(/-/g, "").slice(0, 16); // Example serial number, unique
-  const userId = "bev6xlEqb8ZkaHs44S3KTRORDXu1"; // or your session/user data
-
-  // (1) Build billItems, kotList, etc. as shown in previous answer
-  const billItems = cart.map((item, idx) => ({
-    bags: 1.0,
-    barcode: "0",
-    billId,
-    canWeight: false,
-    categoryId: item.category || "",
-    cess: 0.0,
-    code: 2,
-    createdDate: 0,
-    discountAmount: 0.0,
-    discountPercent: 0.0,
-    duration: 0.0,
-    hsnCode: "0",
-    id: billId + idx + 1,
-    isKOTDone: true,
-    isOutOfStock: false,
-    kitchenId: "LiFtRL8L9ywkQ0xvE1yt",
-    mrpPrice: 0.0,
-    name: item.name,
-    percentage: 0.0,
-    price: item.price,
-    productId: item.id,
-    quantity: item.quantity,
-    regionalName: item.regionalName || "",
-    roomsDays: 0.0,
-    roomsFlag: false,
-    selected: true,
-    state: 0,
-    stockable: false,
-    taxIndex: 2,
-    total: item.price * item.quantity,
-    unitId: 0,
-    updatedDate: 0,
-    viewType: 0,
-    weightValue: 0.0
-  }));
-
-  const kotList = [{
-    dateTime: dayjs().format("MMM DD, YYYY h:mm:ss A"),
-    id: 1,
-    items: cart.map((item, idx) => ({
-      id: idx + 1,
-      itemName: item.name,
-      kotId: 1,
+    // (1) Build billItems, kotList, etc. as shown in previous answer
+    const billItems = cart.map((item, idx) => ({
+      bags: 1.0,
+      barcode: "0",
+      billId,
+      canWeight: false,
+      categoryId: item.category || "",
+      cess: 0.0,
+      code: 2,
+      createdDate: 0,
+      discountAmount: 0.0,
+      discountPercent: 0.0,
+      duration: 0.0,
+      hsnCode: "0",
+      id: billId + idx + 1,
+      isKOTDone: true,
+      isOutOfStock: false,
+      kitchenId: "LiFtRL8L9ywkQ0xvE1yt",
+      mrpPrice: 0.0,
+      name: item.name,
+      percentage: 0.0,
+      price: item.price,
       productId: item.id,
       quantity: item.quantity,
-      state: 0
-    })),
-    kitchenId: "LiFtRL8L9ywkQ0xvE1yt",
-    serialNo: String(billId),
-    state: 0,
-    table: tableNo,
-    userId: 0,
-  }];
+      regionalName: item.regionalName || "",
+      roomsDays: 0.0,
+      roomsFlag: false,
+      selected: true,
+      state: 0,
+      stockable: false,
+      taxIndex: 2,
+      total: item.price * item.quantity,
+      unitId: 0,
+      updatedDate: 0,
+      viewType: 0,
+      weightValue: 0.0,
+    }));
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const taxAmount = Math.round(total * 0.05 * 10) / 10;
-  const finalTotal = total + taxAmount;
+    const kotList = [
+      {
+        dateTime: dayjs().format("MMM DD, YYYY h:mm:ss A"),
+        id: 1,
+        items: cart.map((item, idx) => ({
+          id: idx + 1,
+          itemName: item.name,
+          kotId: 1,
+          productId: item.id,
+          quantity: item.quantity,
+          state: 0,
+        })),
+        kitchenId: "LiFtRL8L9ywkQ0xvE1yt",
+        serialNo: String(billId),
+        state: 0,
+        table: tableNo,
+        userId: 0,
+      },
+    ];
 
-  const tableDetailsObj = {
-    balance: finalTotal,
-    billItems,
-    billPrintCount: 0,
-    billType: "AC",
-    captainTabId, // same as id
-    cashTenderAmt: 0.0,
-    cessAmount: 0.0,
-    changeAmt: 0.0,
-    checkInTime: billId,
-    checkOutTime: 0,
-    createdDate: billId,
-    customerBillAdvance: 0.0,
-    customerId: "",
-    days: 0,
-    discount: 0.0,
-    discountPercent: 0.0,
-    duration: 0.0,
-    estimate: false,
-    finalTotal: finalTotal,
-    gstFlag: false,
-    id: billId,
-    isKOTDone: true,
-    isSelected: true,
-    kotList,
-    noOfPerson: 0,
-    parcelCharges: 0.0,
-    paymentMode: 0,
-    percentage: 0.0,
-    roundOff: Math.round((finalTotal - Math.floor(finalTotal)) * 100) / 100,
-    serviceChargeAmount: 0.0,
-    serviceChargePercent: 0.0,
-    settled: false,
-    state: 1,
-    table: JSON.stringify([{
-      table_no: tableNumberOnly?.toString(),
-      premise: "AC",
-      premise_type: "Table",
-      view_type: 0,
-      group_id: tableNumberOnly,
-      booked: true,
-      settled: false
-    }]),
-    taxAmount: taxAmount,
-    taxState: 0,
-    total: total,
-    updatedDate: 0,
-    userId,
-    viewType: 2,
+    const total = cart.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+    const taxAmount = Math.round(total * 0.05 * 10) / 10;
+    const finalTotal = total + taxAmount;
+
+    const tableDetailsObj = {
+      balance: finalTotal,
+      billItems,
+      billPrintCount: 0,
+      billType: "AC",
+      captainTabId, // same as id
+      cashTenderAmt: 0.0,
+      cessAmount: 0.0,
+      changeAmt: 0.0,
+      checkInTime: billId,
+      checkOutTime: 0,
+      createdDate: billId,
+      customerBillAdvance: 0.0,
+      customerId: "",
+      days: 0,
+      discount: 0.0,
+      discountPercent: 0.0,
+      duration: 0.0,
+      estimate: false,
+      finalTotal: finalTotal,
+      gstFlag: false,
+      id: billId,
+      isKOTDone: true,
+      isSelected: true,
+      kotList,
+      noOfPerson: 0,
+      parcelCharges: 0.0,
+      paymentMode: 0,
+      percentage: 0.0,
+      roundOff: Math.round((finalTotal - Math.floor(finalTotal)) * 100) / 100,
+      serviceChargeAmount: 0.0,
+      serviceChargePercent: 0.0,
+      settled: false,
+      state: 1,
+      table: JSON.stringify([
+        {
+          table_no: tableNumberOnly?.toString(),
+          premise: "AC",
+          premise_type: "Table",
+          view_type: 0,
+          group_id: tableNumberOnly,
+          booked: true,
+          settled: false,
+        },
+      ]),
+      taxAmount: taxAmount,
+      taxState: 0,
+      total: total,
+      updatedDate: 0,
+      userId,
+      viewType: 2,
+    };
+
+    // (2) Build the Firestore document
+    const captainOrderDoc = {
+      flag: "input",
+      groupID: Number(groupID), // number
+      id: captainTabId, // string
+      serailNo, // string
+      tableDetails: JSON.stringify(tableDetailsObj), // Save as string
+    };
+
+    // (3) Save to Firestore "CAPTAIN_ORDER" subcollection
+    try {
+      const outletRef = doc(db, "OUTLET", outlet.id);
+      await addDoc(collection(outletRef, "CAPTAIN_ORDER"), captainOrderDoc);
+      dispatch(clearCart());
+      setLoading(false);
+      navigate(`/${outlet.id}/${tableNo}/order-success`);
+    } catch (error) {
+      console.error("Failed to place Captain Order:", error);
+      alert("Failed to place Captain Order. Please try again.");
+    }
   };
-
-  // (2) Build the Firestore document
-  const captainOrderDoc = {
-    flag: "input",
-    groupID:Number(groupID), // number
-    id: captainTabId, // string
-    serailNo, // string
-    tableDetails: JSON.stringify(tableDetailsObj) // Save as string
-  };
-
-  // (3) Save to Firestore "CAPTAIN_ORDER" subcollection
-  try {
-    const outletRef = doc(db, "OUTLET", outlet.id);
-    await addDoc(collection(outletRef, "CAPTAIN_ORDER"), captainOrderDoc);
-    navigate(`/${outlet.id}/${tableNo}/order-success`);
-    // Optionally, clear cart, redirect, etc.
-    alert("Captain Order Saved Successfully!");
-  } catch (error) {
-    console.error("Failed to place Captain Order:", error);
-    alert("Failed to place Captain Order. Please try again.");
-  }
-};
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
