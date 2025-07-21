@@ -61,8 +61,8 @@ export default function OrderSuccessPage() {
         </div>
 
         <div className="bg-orange-50 rounded-lg p-4 mb-6">
-          <h2 className="text-lg font-semibold text-orange-800 mb-2">Order Token</h2>
-          <div className="text-3xl font-bold text-orange-600">on {tableNo?.toLocaleUpperCase()}</div>
+          {/* <h2 className="text-lg font-semibold text-orange-800 mb-2">Order Token</h2> */}
+          <div className="text-3xl font-bold text-orange-600">{tableNo?.toLocaleUpperCase()}</div>
           {/* <p className="text-sm text-orange-700 mt-2">Please save this token for order tracking</p> */}
         </div>
 
