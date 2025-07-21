@@ -1,5 +1,12 @@
 {
   "files": [],
+   "compilerOptions": {
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
+  },
+    "rules": {
+    "@typescript-eslint/no-unused-vars": "warn"
+  },
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
