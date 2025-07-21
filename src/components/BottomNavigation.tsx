@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom"
-import { Home, ShoppingCart, Clock, UtensilsCrossed } from 'lucide-react'
+import { Home, ShoppingCart, UtensilsCrossed } from 'lucide-react'
 import { useSelector } from "react-redux"
 import type { RootState } from '../redux/store';
 export default function BottomNavigation() {
@@ -12,7 +12,7 @@ const outlet = useSelector((state: RootState) => state.outlet)
     { id: "home", label: "Home", icon: Home, path: `/${outlet.id}/${tableNo}` },
     { id: "menu", label: "Menu", icon: UtensilsCrossed, path:  `/${outlet.id}/${tableNo}/menu` },
     { id: "cart", label: "Cart", icon: ShoppingCart, path: `/${outlet.id}/${tableNo}/cart`, badge: cart.length },
-    { id: "orders", label: "Orders", icon: Clock, path: `/${outlet.id}/${tableNo}/orders`},
+    // { id: "orders", label: "Orders", icon: Clock, path: `/${outlet.id}/${tableNo}/orders`},
     // { id: "demo", label: "Demo", icon: Play, path: "/demo" },
   ]
 

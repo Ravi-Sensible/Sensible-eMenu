@@ -10,7 +10,7 @@ import MenuPage from './pages/MenuPage'
 import CartPage from './pages/CartPage'
 import PaymentPage from './pages/PaymentPage'
 import OrderSuccessPage from './pages/OrderSuccessPage'
-import OrdersPage from './pages/OrdersPage'
+// import OrdersPage from './pages/OrdersPage'
 import OutletLoader from './components/OutletLoader'
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
           <Route path="cart" element={<CartPage />} />
           <Route path="payment" element={<PaymentPage />} />
           <Route path="order-success" element={<OrderSuccessPage />} />
-          <Route path="orders" element={<OrdersPage />} />
+          {/* <Route path="orders" element={<OrdersPage />} /> */}
           {/* <Route path="demo" element={<DemoPage />} /> */}
         </Route>
       </Routes>

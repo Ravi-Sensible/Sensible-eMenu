@@ -4,37 +4,27 @@ import splashLogo from "../assets/splashLogo.png";
 import type { RootState } from '../redux/store';
 import { useSelector } from "react-redux";
 export default function BootstrapPage() {
-  const [isLoaded,] = useState(false);
+  // FIX: Allow state update for animation
+  const [isLoaded, setIsLoaded] = useState(false);
   const navigate = useNavigate();
- const tableNo = localStorage.getItem("tableNo");
+  const tableNo = localStorage.getItem("tableNo");
   const outlet = useSelector((state: RootState) => state.outlet)
-  
+ 
+  useEffect(() => {
+    setIsLoaded(true); // <-- add this
+  }, []);
+
   useEffect(() => {
     if (outlet.id && tableNo) {
       const timer = setTimeout(() => {
-        navigate(`/${outlet.id}/${tableNo}/menu`);
-      }, 1000);
-
+        // navigate(`/${outlet.id}/${tableNo}/menu`);
+      }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [outlet.id, navigate]);
-
-  // useEffect(() => {
-  //   if (outlet.id) {
-  //     if (outlet.active) {
-  //       const timer = setTimeout(() => {
-  //         navigate(`/${outlet.id}/menu`);
-  //       }, 1000);
-
-  //       return () => clearTimeout(timer);
-  //     } else {
-  //       alert("Please activate this outlet to continue.");
-  //     }
-  //   }
-  // }, [outlet.id, outlet.active, navigate]);
+  }, [outlet.id, navigate, tableNo]); // Also include tableNo for safety
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#FF9171] flex items-center justify-center p-4">
       <div className="text-center">
         <div
           className={`transition-all duration-1000 ease-out ${
@@ -58,6 +48,7 @@ export default function BootstrapPage() {
     </div>
   );
 }
+
 
 // <div className="min-h-screen bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center p-4">
 //   <div className="text-center">
