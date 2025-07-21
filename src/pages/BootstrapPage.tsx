@@ -17,7 +17,7 @@ export default function BootstrapPage() {
   useEffect(() => {
     if (outlet.id && tableNo) {
       const timer = setTimeout(() => {
-        // navigate(`/${outlet.id}/${tableNo}/menu`);
+        navigate(`/${outlet.id}/${tableNo}/menu`);
       }, 2000);
       return () => clearTimeout(timer);
     }
