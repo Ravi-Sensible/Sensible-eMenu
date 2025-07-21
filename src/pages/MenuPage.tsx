@@ -1,21 +1,25 @@
-import  { useState, useEffect } from "react";
-import {useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { doc, collection, getDoc, getDocs } from "firebase/firestore";
 import Header from "../components/Header";
 import CategorySlider from "../components/CategorySlider";
 import MenuItemCard from "../components/MenuItemCard";
 import type { MenuItem } from "../types";
 import { db } from "../lib/firebase";
-import type { RootState } from '../redux/store';
+import type { RootState } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, removeFromCart, updateQuantity } from "../redux/slices/cartSlice";
+import {
+  addToCart,
+  removeFromCart,
+  updateQuantity,
+} from "../redux/slices/cartSlice";
 
 export default function MenuPage() {
-      const outlet = useSelector((state: RootState) => state.outlet)
-      const outletId=outlet?.id
+  const outlet = useSelector((state: RootState) => state.outlet);
+  const outletId = outlet?.id;
   // const { outletId = "6QDWpN5HHvAbN7OwSyRz" } = useParams();
   const navigate = useNavigate();
- const tableNo = localStorage.getItem("tableNo");
+  const tableNo = localStorage.getItem("tableNo");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [loading, setLoading] = useState(true);
@@ -25,9 +29,8 @@ export default function MenuPage() {
   );
   const [error, setError] = useState<string | null>(null);
   const [outletInfo, setOutletInfo] = useState({});
-    const dispatch = useDispatch()
-  const cart = useSelector((state: RootState) => state.cart.items)
-
+  const dispatch = useDispatch();
+  const cart = useSelector((state: RootState) => state.cart.items);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,22 +85,21 @@ export default function MenuPage() {
         ? item.name.toLowerCase().includes(searchQuery.toLowerCase())
         : true
     );
-
-    
+console.log(filteredItems)
   const getItemQuantity = (itemId: string) =>
     cart.find((item) => item.id === itemId)?.quantity || 0;
 
   const handleAddToCart = (item: MenuItem) => {
     // addToCart(item);
-     dispatch(addToCart(item))
+    dispatch(addToCart(item));
   };
 
   const handleUpdateQuantity = (id: string, quantity: number) => {
     if (quantity === 0) {
-      dispatch(removeFromCart(id))
+      dispatch(removeFromCart(id));
     } else {
       // updateQuantity(itemId, quantity);
-      dispatch(updateQuantity({ id, quantity }))
+      dispatch(updateQuantity({ id, quantity }));
     }
   };
 
@@ -139,7 +141,7 @@ export default function MenuPage() {
         <div className="px-4 space-y-4">
           {filteredItems.map((item) => (
             <MenuItemCard
-              key={item.id}
+              key={item.id || item.name}
               item={item}
               quantity={getItemQuantity(item.id)}
               onAddToCart={() => handleAddToCart(item)}

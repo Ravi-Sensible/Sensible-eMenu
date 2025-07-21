@@ -1,56 +1,55 @@
-import  { useEffect, useState } from "react"
+// import  { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { CheckCircle, Home } from 'lucide-react'
-import { useCart } from "../hooks/useCart"
+// import { useCart } from "../hooks/useCart"
 import { useSelector } from "react-redux"
 import type { RootState } from '../redux/store';
 
 export default function OrderSuccessPage() {
-  const [orderToken, setOrderToken] = useState<string>("")
+  // const [orderToken, setOrderToken] = useState<string>("")
    const tableNo = localStorage.getItem("tableNo");
     const outlet = useSelector((state: RootState) => state.outlet)
-  const { cart, clearCart } = useCart()
+  // const { cart, clearCart } = useCart()
   const navigate = useNavigate()
 
-  useEffect(() => {
-    saveOrder()
-  }, [])
+  // useEffect(() => {
+  //   saveOrder()
+  // }, [])
 
-  const generateOrderToken = () => {
-    return Math.floor(1000 + Math.random() * 9000).toString()
-  }
+  // const generateOrderToken = () => {
+  //   return Math.floor(1000 + Math.random() * 9000).toString()
+  // }
 
-  const saveOrder = () => {
-    const token = generateOrderToken()
-    const mobileNumber = localStorage.getItem("customerMobile") || ""
-    const paymentMethod = localStorage.getItem("selectedPaymentMethod") || "cash"
-    const totalAmount = cart.reduce((total, item) => total + item.price * item.quantity, 0)
+  // const saveOrder = () => {
+  //   const token = generateOrderToken()
+  //   const mobileNumber = localStorage.getItem("customerMobile") || ""
+  //   const paymentMethod = localStorage.getItem("selectedPaymentMethod") || "cash"
+  //   const totalAmount = cart.reduce((total, item) => total + item.price * item.quantity, 0)
 
-    const orderData = {
-      orderToken: token,
-      mobileNumber,
-      items: cart,
-      totalAmount,
-      paymentMethod,
-      timestamp: new Date().toISOString(),
-      status: "confirmed",
-      estimatedDelivery: "25-30 minutes",
-      restaurantInfo: {
-        name: "FoodieExpress",
-        branch: "Downtown Branch",
-        address: "123 Main Street, Downtown",
-      },
-    }
+  //   const orderData = {
+  //     orderToken: token,
+  //     mobileNumber,
+  //     items: cart,
+  //     totalAmount,
+  //     paymentMethod,
+  //     timestamp: new Date().toISOString(),
+  //     status: "confirmed",
+  //     estimatedDelivery: "25-30 minutes",
+  //     restaurantInfo: {
+  //       name: "FoodieExpress",
+  //       branch: "Downtown Branch",
+  //       address: "123 Main Street, Downtown",
+  //     },
+  //   }
 
-    // Save to localStorage (simulating database)
-    const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]")
-    existingOrders.push(orderData)
-    localStorage.setItem("orders", JSON.stringify(existingOrders))
-
-    setOrderToken(token)
-    clearCart()
-    localStorage.removeItem("selectedPaymentMethod")
-  }
+  //   // Save to localStorage (simulating database)
+  //   const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]")
+  //   existingOrders.push(orderData)
+  //   localStorage.setItem("orders", JSON.stringify(existingOrders))
+  //   setOrderToken(token)
+  //   clearCart()
+  //   localStorage.removeItem("selectedPaymentMethod")
+  // }
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 pb-20">
@@ -63,8 +62,8 @@ export default function OrderSuccessPage() {
 
         <div className="bg-orange-50 rounded-lg p-4 mb-6">
           <h2 className="text-lg font-semibold text-orange-800 mb-2">Order Token</h2>
-          <div className="text-3xl font-bold text-orange-600">{orderToken} on {tableNo?.toLocaleUpperCase()}</div>
-          <p className="text-sm text-orange-700 mt-2">Please save this token for order tracking</p>
+          <div className="text-3xl font-bold text-orange-600">on {tableNo?.toLocaleUpperCase()}</div>
+          {/* <p className="text-sm text-orange-700 mt-2">Please save this token for order tracking</p> */}
         </div>
 
         <div className="space-y-4">
@@ -85,7 +84,7 @@ export default function OrderSuccessPage() {
         </div>
 
         <div className="mt-6 text-sm text-gray-500">
-          <p>Estimated delivery time: 25-30 minutes</p>
+          <p>Estimated delivery time: 10-30 minutes</p>
         </div>
       </div>
     </div>

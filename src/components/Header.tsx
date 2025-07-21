@@ -1,18 +1,21 @@
-
-import { Search, MapPin } from 'lucide-react'
+import { Search, MapPin } from "lucide-react";
 
 interface HeaderProps {
-  searchQuery: string
-   outlet: {
-    name?: string
-    branch?: string
+  searchQuery: string;
+  outlet: {
+    name?: string;
+    branch?: string;
     // optionally add: openingTime?: string, closingTime?: string, status?: string
-  }
-  setSearchQuery: (query: string) => void
+  };
+  setSearchQuery: (query: string) => void;
 }
 
-export default function Header({ searchQuery, setSearchQuery,outlet }: HeaderProps) {
-   const tableNo = localStorage.getItem("tableNo");
+export default function Header({
+  searchQuery,
+  setSearchQuery,
+  outlet,
+}: HeaderProps) {
+  const tableNo = localStorage.getItem("tableNo");
   return (
     <header className="bg-white shadow-sm sticky top-0 z-40">
       <div className="px-4 py-4">
@@ -24,7 +27,7 @@ export default function Header({ searchQuery, setSearchQuery,outlet }: HeaderPro
               <span>{outlet?.branch}</span>
             </div>
           </div>
-          <div className='font-bold text-2xl'>
+          <div className="font-bold text-2xl">
             {tableNo?.toLocaleUpperCase()}
           </div>
           <div className="text-right">
@@ -35,9 +38,9 @@ export default function Header({ searchQuery, setSearchQuery,outlet }: HeaderPro
 
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-             <input
+          <input
             type="text"
-            placeholder="Search for food..."
+            placeholder="Search for product..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-10 pr-4 py-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -45,5 +48,5 @@ export default function Header({ searchQuery, setSearchQuery,outlet }: HeaderPro
         </div>
       </div>
     </header>
-  )
+  );
 }
