@@ -2,7 +2,6 @@ import  { useState, useEffect } from "react";
 import {useNavigate } from "react-router-dom";
 import { doc, collection, getDoc, getDocs } from "firebase/firestore";
 import Header from "../components/Header";
-import BannerCarousel from "../components/BannerCarousel";
 import CategorySlider from "../components/CategorySlider";
 import MenuItemCard from "../components/MenuItemCard";
 import type { MenuItem } from "../types";

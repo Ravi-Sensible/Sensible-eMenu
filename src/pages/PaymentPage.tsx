@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   CreditCard,
@@ -55,131 +55,131 @@ export default function PaymentPage() {
   //   navigate("/order-success")
   // }
 
-  const handlePlaceOrder = async () => {
-    if (!selectedMethod) return;
-    setLoading(true);
-    const mobile = localStorage.getItem("customerMobile");
-    if (!mobile || cart.length === 0 || !outlet.id) return;
+  // const handlePlaceOrder = async () => {
+  //   if (!selectedMethod) return;
+  //   setLoading(true);
+  //   const mobile = localStorage.getItem("customerMobile");
+  //   if (!mobile || cart.length === 0 || !outlet.id) return;
 
-    const orderId = uuidv4(); // or your own logic
-    const orderDateTime = Date.now().toString();
+  //   const orderId = uuidv4(); // or your own logic
+  //   const orderDateTime = Date.now().toString();
 
-    const orderItems = cart.map((item) => ({
-      addons: [],
-      cgst: 0,
-      cgst_percent: 0,
-      discount: 0,
-      dish: [],
-      gst: 0,
-      gst_percent: 0,
-      instructions: "",
-      item_id: item.id,
-      item_name: item.name,
-      item_quantity: item.quantity,
-      item_unit_price: item.price,
-      packaging: 0,
-      packaging_cgst: 0,
-      packaging_cgst_percent: 0,
-      packaging_gst: 0,
-      packaging_sgst: 0,
-      packaging_sgst_percent: 0,
-      sgst: 0,
-      sgst_percent: 0,
-      subtotal: item.quantity * item.price,
-      variants: [],
-      wera_item_id: 0,
-    }));
+  //   const orderItems = cart.map((item) => ({
+  //     addons: [],
+  //     cgst: 0,
+  //     cgst_percent: 0,
+  //     discount: 0,
+  //     dish: [],
+  //     gst: 0,
+  //     gst_percent: 0,
+  //     instructions: "",
+  //     item_id: item.id,
+  //     item_name: item.name,
+  //     item_quantity: item.quantity,
+  //     item_unit_price: item.price,
+  //     packaging: 0,
+  //     packaging_cgst: 0,
+  //     packaging_cgst_percent: 0,
+  //     packaging_gst: 0,
+  //     packaging_sgst: 0,
+  //     packaging_sgst_percent: 0,
+  //     sgst: 0,
+  //     sgst_percent: 0,
+  //     subtotal: item.quantity * item.price,
+  //     variants: [],
+  //     wera_item_id: 0,
+  //   }));
 
-    const orderPayload = {
-      cgst: 0,
-      customer_details: {
-        address: "",
-        address_type: "",
-        city: "",
-        country: "India",
-        customer_id: "",
-        delivery_area: "",
-        delivery_coordinates_type: "",
-        name: "",
-        order_instructions: "",
-        phone_number: mobile,
-        pincode: "",
-        state: "",
-      },
-      dayId: dayjs().format("YYYY-MM-DD"),
-      delivery_charge: 0,
-      discount: 0,
-      discount_reason: "",
-      enable_delivery: 0,
-      expected_delivery_time: "",
-      external_order_id: "",
-      foodready: 0,
-      gross_amount: cart.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-      ),
-      gst: 0,
-      id: orderId,
-      is_bill_printed: false,
-      is_edit: false,
-      is_kot_printed: false,
-      is_pop_order: false,
-      net_amount: cart.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-      ),
-      order_date_time: orderDateTime,
-      order_from: "WEB_APP",
-      order_id: Math.floor(Math.random() * 1000000), // or use timestamp
-      order_instructions: "",
-      order_items: orderItems,
-      order_otp: "",
-      order_packaging: 0,
-      order_taker: false,
-      order_type: "ONLINE",
-      packaging: 0,
-      packaging_cgst: 0,
-      packaging_cgst_percent: 0,
-      packaging_sgst: 0,
-      packaging_sgst_percent: 0,
-      payment_mode: selectedMethod,
-      rStatus: "PENDING",
-      rejection_id: 0,
-      rejection_msg: "",
-      restaurant_address: "",
-      restaurant_id: 0,
-      restaurant_name: outlet.name,
-      restaurant_number: "",
-      rider: {
-        arrival_time: "",
-        is_rider_available: false,
-        otp: "",
-        otp_message: "",
-        rider_name: "",
-        rider_number: "",
-        rider_status: "pending",
-        time_to_arrive: "",
-      },
-      sgst: 0,
-      showOTP: "",
-      status: "pending",
-      taxes: [],
-    };
+  //   const orderPayload = {
+  //     cgst: 0,
+  //     customer_details: {
+  //       address: "",
+  //       address_type: "",
+  //       city: "",
+  //       country: "India",
+  //       customer_id: "",
+  //       delivery_area: "",
+  //       delivery_coordinates_type: "",
+  //       name: "",
+  //       order_instructions: "",
+  //       phone_number: mobile,
+  //       pincode: "",
+  //       state: "",
+  //     },
+  //     dayId: dayjs().format("YYYY-MM-DD"),
+  //     delivery_charge: 0,
+  //     discount: 0,
+  //     discount_reason: "",
+  //     enable_delivery: 0,
+  //     expected_delivery_time: "",
+  //     external_order_id: "",
+  //     foodready: 0,
+  //     gross_amount: cart.reduce(
+  //       (sum, item) => sum + item.price * item.quantity,
+  //       0
+  //     ),
+  //     gst: 0,
+  //     id: orderId,
+  //     is_bill_printed: false,
+  //     is_edit: false,
+  //     is_kot_printed: false,
+  //     is_pop_order: false,
+  //     net_amount: cart.reduce(
+  //       (sum, item) => sum + item.price * item.quantity,
+  //       0
+  //     ),
+  //     order_date_time: orderDateTime,
+  //     order_from: "WEB_APP",
+  //     order_id: Math.floor(Math.random() * 1000000), // or use timestamp
+  //     order_instructions: "",
+  //     order_items: orderItems,
+  //     order_otp: "",
+  //     order_packaging: 0,
+  //     order_taker: false,
+  //     order_type: "ONLINE",
+  //     packaging: 0,
+  //     packaging_cgst: 0,
+  //     packaging_cgst_percent: 0,
+  //     packaging_sgst: 0,
+  //     packaging_sgst_percent: 0,
+  //     payment_mode: selectedMethod,
+  //     rStatus: "PENDING",
+  //     rejection_id: 0,
+  //     rejection_msg: "",
+  //     restaurant_address: "",
+  //     restaurant_id: 0,
+  //     restaurant_name: outlet.name,
+  //     restaurant_number: "",
+  //     rider: {
+  //       arrival_time: "",
+  //       is_rider_available: false,
+  //       otp: "",
+  //       otp_message: "",
+  //       rider_name: "",
+  //       rider_number: "",
+  //       rider_status: "pending",
+  //       time_to_arrive: "",
+  //     },
+  //     sgst: 0,
+  //     showOTP: "",
+  //     status: "pending",
+  //     taxes: [],
+  //   };
 
-    try {
-      const outletRef = doc(db, "OUTLET", outlet.id);
-      await addDoc(collection(outletRef, "ONLINE_ORDERS"), orderPayload);
-      dispatch(clearCart())
-      setLoading(false);
-      localStorage.setItem("selectedPaymentMethod", selectedMethod);
-      navigate(`/${outlet.id}/${tableNo}/order-success`);
-      // navigate("/order-success")
-    } catch (error) {
-      setLoading(false);
-      console.error("Failed to place order:", error);
-      alert("Failed to place order. Please try again.");
-    }
-  };
+  //   try {
+  //     const outletRef = doc(db, "OUTLET", outlet.id);
+  //     await addDoc(collection(outletRef, "ONLINE_ORDERS"), orderPayload);
+  //     dispatch(clearCart())
+  //     setLoading(false);
+  //     localStorage.setItem("selectedPaymentMethod", selectedMethod);
+  //     navigate(`/${outlet.id}/${tableNo}/order-success`);
+  //     // navigate("/order-success")
+  //   } catch (error) {
+  //     setLoading(false);
+  //     console.error("Failed to place order:", error);
+  //     alert("Failed to place order. Please try again.");
+  //   }
+  // };
 
 
   const handleSaveCaptainOrder = async () => {
