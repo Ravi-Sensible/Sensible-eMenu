@@ -178,3 +178,8 @@ export interface Premise {
   type: string; // could also be `"Table"` | "..." if more types exist
   userId: string;
 }
+
+
+export interface Outletinfo{
+  
+}

@@ -8,7 +8,7 @@ import type { RootState } from "../redux/store"
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([])
    const outlet = useSelector((state: RootState) => state.outlet)
-    const tableNo = localStorage.getItem("tableNo");
+  const tableNo = localStorage.getItem("tableNo");
   const navigate = useNavigate()
 
   useEffect(() => {
