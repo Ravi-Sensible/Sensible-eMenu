@@ -164,3 +164,17 @@ export interface Rider {
   rider_status: string;
   time_to_arrive: string;
 }
+
+export interface Premise {
+  id: string;
+  code: number;
+  createdTime: string; // or use Date if you parse Firestore Timestamp
+  extraPriceFlag: boolean;
+  name: string;
+  price: number;
+  range: number;
+  tables: number;
+  taxIndex: number;
+  type: string; // could also be `"Table"` | "..." if more types exist
+  userId: string;
+}
