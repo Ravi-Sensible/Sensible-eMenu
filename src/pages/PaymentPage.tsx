@@ -383,10 +383,10 @@ const handleSaveCaptainOrder = async () => {
     const premise = firstItem?.name;
     const premiseType = firstItem?.type;
     let tableNumberOnly = tableNo?.replace(/^table/i, "") || "";
-
+    const groupID = tableNumberOnly;
     const now = Date.now();
     const billId = now;
-    const groupID = tableNumberOnly;
+
     const captainTabId = "4zqeYYHPoEpQ6CADLgsI";
     const serailNo = uuidv4().replace(/-/g, "").slice(0, 16);
     const userId = "bev6xlEqb8ZkaHs44S3KTRORDXu1";

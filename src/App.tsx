@@ -13,6 +13,7 @@ import OrderSuccessPage from './pages/OrderSuccessPage'
 // import OrdersPage from './pages/OrdersPage'
 import OutletLoader from './components/OutletLoader'
 import EMenuPage from './pages/EMenuPage'
+import OrdersPage from './pages/OrdersPage'
 
 function AppRoutes() {
   const location = useLocation()
@@ -33,6 +34,7 @@ function AppRoutes() {
           <Route path="cart" element={<CartPage />} />
           <Route path="payment" element={<PaymentPage />} />
           <Route path="order-success" element={<OrderSuccessPage />} />
+          <Route path="orders" element={<OrdersPage />} />
         </Route>
       </Routes>
 

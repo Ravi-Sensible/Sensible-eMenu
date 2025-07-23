@@ -1,44 +1,75 @@
-import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import { ArrowLeft, Clock, CheckCircle, Package } from 'lucide-react'
-import type { Order } from "../types"
-import { useSelector } from "react-redux"
-import type { RootState } from "../redux/store"
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+import type { Order } from "../types";
+import { useSelector } from "react-redux";
+import type { RootState } from "../redux/store";
+import { collection, doc, getDocs, limit, query, where } from "firebase/firestore";
+import { db } from "../lib/firebase";
 
 export default function OrdersPage() {
-  const [orders, setOrders] = useState<Order[]>([])
-   const outlet = useSelector((state: RootState) => state.outlet)
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading,setLoading]=useState<boolean>(false)
+  const outlet = useSelector((state: RootState) => state.outlet);
   const tableNo = localStorage.getItem("tableNo");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  let tableNumberOnly = tableNo?.replace(/^table/i, "") || "";
+  const groupID = Number(tableNumberOnly);
 
   useEffect(() => {
-    const savedOrders = JSON.parse(localStorage.getItem("orders") || "[]")
-    setOrders(savedOrders.reverse())
-  }, [])
+    const fetchOrder = async () => {
+      try {
+        if (!outlet.id || !groupID) return;
+        setLoading(true)
+        const outletRef = doc(db, "OUTLET", outlet.id);
+        const captainOrderQuery = query(
+          collection(outletRef, "CAPTAIN_ORDER"),
+          where("groupID", "==", groupID),
+          limit(1)
+        );
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "confirmed":
-        return <CheckCircle className="w-5 h-5 text-green-500" />
-      case "preparing":
-        return <Clock className="w-5 h-5 text-orange-500" />
-      case "delivered":
-        return <Package className="w-5 h-5 text-blue-500" />
-      default:
-        return <Clock className="w-5 h-5 text-gray-500" />
-    }
+        const snapshot = await getDocs(captainOrderQuery);
+
+        if (!snapshot.empty) {
+          const docData:Order = snapshot.docs[0].data() as Order;
+          const details = JSON.parse(docData.tableDetails || "{}");
+          const billItems = details.billItems || [];
+
+          const formattedProducts = billItems.map((item: any) => ({
+            name: item.name,
+            regionalName: item.regionalName,
+            quantity: item.quantity,
+            price: item.price,
+            total: item.total,
+          }));
+
+          setProducts(formattedProducts.reverse());
+           setLoading(false)
+        } else {
+          setProducts([]);
+          setLoading(false)
+        }
+      } catch (error) {
+        console.error("Error fetching captain order:", error);
+      }
+    };
+
+    fetchOrder();
+  }, [outlet.id, groupID]);
+
+
+
+    if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+      </div>
+    );
   }
 
-  const formatDate = (timestamp: string) => {
-    return new Date(timestamp).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    })
-  }
 
-  if (orders.length === 0) {
+  if (products.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 pb-20">
         <header className="bg-white shadow-sm sticky top-0 z-40">
@@ -53,7 +84,9 @@ export default function OrdersPage() {
         <div className="flex flex-col items-center justify-center h-96 px-4">
           <div className="text-6xl mb-4">📋</div>
           <h2 className="text-xl font-semibold mb-2">No orders yet</h2>
-          <p className="text-gray-600 text-center mb-6">Your order history will appear here</p>
+          <p className="text-gray-600 text-center mb-6">
+            Your order history will appear here
+          </p>
           <button
             onClick={() => navigate(`/${outlet.id}/${tableNo}/menu`)}
             className="bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold"
@@ -62,7 +95,7 @@ export default function OrdersPage() {
           </button>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -72,49 +105,41 @@ export default function OrdersPage() {
           <button onClick={() => navigate(-1)} className="mr-4">
             <ArrowLeft className="w-6 h-6" />
           </button>
-          <h1 className="text-xl font-semibold">Order History</h1>
+          <h1 className="text-xl font-semibold">Order Summary</h1>
         </div>
       </header>
 
       <main className="px-4 py-4 space-y-4">
-        {orders.map((order) => (
-          <div key={order.orderToken} className="bg-white rounded-lg p-4 shadow-sm">
-            <div className="flex justify-between items-start mb-3">
-              <div>
-                <div className="flex items-center space-x-2 mb-1">
-                  {getStatusIcon(order.status)}
-                  <span className="font-semibold text-lg">#{order.orderToken}</span>
-                </div>
-                <p className="text-gray-600 text-sm">{formatDate(order.timestamp)}</p>
-              </div>
-              <div className="text-right">
-                <p className="font-semibold text-lg text-orange-600">${order.totalAmount.toFixed(2)}</p>
-                <p className="text-gray-600 text-sm capitalize">{order.paymentMethod}</p>
-              </div>
+        <div className="bg-white rounded-lg p-4 shadow-sm">
+          <div className="flex justify-between items-start mb-3">
+            <div className="flex items-center space-x-2 mb-1">
+              {/* {status && getStatusIcon(status)} */}
+              <span className="font-semibold text-lg">Order</span>
             </div>
-
-            <div className="border-t pt-3">
-              <div className="space-y-2">
-                {order.items.map((item, index) => (
-                  <div key={index} className="flex justify-between text-sm">
-                    <span>
-                      {item.name} x {item.quantity}
-                    </span>
-                    <span>${(item.price * item.quantity).toFixed(2)}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-3 pt-3 border-t">
-              <div className="flex items-center justify-between text-sm text-gray-600">
-                <span>Estimated delivery: {order.estimatedDelivery}</span>
-                <span className="capitalize font-medium text-green-600">{order.status}</span>
-              </div>
+            <div className="text-right">
+              <p className="font-semibold text-lg text-orange-600">
+                ₹
+                {products
+                  .reduce((acc, curr) => acc + curr.total, 0)
+                  .toFixed(2)}
+              </p>
             </div>
           </div>
-        ))}
+
+          <div className="border-t pt-3">
+            <div className="space-y-2">
+              {products.map((item, index) => (
+                <div key={index} className="flex justify-between text-sm">
+                  <span>
+                    {item.name} x {item.quantity}
+                  </span>
+                  <span>₹{(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </main>
     </div>
-  )
+  );
 }

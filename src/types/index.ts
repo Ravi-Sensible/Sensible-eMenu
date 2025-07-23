@@ -19,19 +19,11 @@ export interface CartItem {
 }
 
 export interface Order {
-  orderToken: string
-  mobileNumber: string
-  items: CartItem[]
-  totalAmount: number
-  paymentMethod: string
-  timestamp: string
-  status: string
-  estimatedDelivery: string
-  restaurantInfo: {
-    name: string
-    branch: string
-    address: string
-  }
+  id: string;
+  groupID: number;
+  tableDetails: any; // or type properly if needed
+  flag: string;
+  serailNo: string;
 }
 
 export interface MenuItem {
