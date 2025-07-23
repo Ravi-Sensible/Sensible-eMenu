@@ -114,13 +114,14 @@ export default function OrdersPage() {
           <div className="flex justify-between items-start mb-3">
             <div className="flex items-center space-x-2 mb-1">
               {/* {status && getStatusIcon(status)} */}
-              <span className="font-semibold text-lg">Order</span>
+              {/* <span className="font-semibold text-lg">Order </span> */}
+                 <span className="font-semibold text-lg"> Total Items: {products?.length}</span>
             </div>
             <div className="text-right">
               <p className="font-semibold text-lg text-orange-600">
                 ₹
                 {products
-                  .reduce((acc, curr) => acc + curr.total, 0)
+                  .reduce((acc, curr) => acc + curr.price * curr.quantity, 0)
                   .toFixed(2)}
               </p>
             </div>
@@ -129,11 +130,11 @@ export default function OrdersPage() {
           <div className="border-t pt-3">
             <div className="space-y-2">
               {products.map((item, index) => (
-                <div key={index} className="flex justify-between text-sm">
+                <div key={index} className="flex justify-between text-sm border-b">
                   <span>
-                    {item.name} x {item.quantity}
+                    {item.name} <br/><span className="font-semibold text-lg">₹{item.price}</span> X <span className="font-semibold text-lg">{item.quantity}</span>
                   </span>
-                  <span>₹{(item.price * item.quantity).toFixed(2)}</span>
+                  <span className="font-semibold text-base">₹{(item.price * item.quantity).toFixed(2)}</span>
                 </div>
               ))}
             </div>
