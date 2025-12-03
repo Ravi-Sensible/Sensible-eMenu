@@ -14,15 +14,15 @@ import {
   addDoc,
   collection,
   doc,
-  getDocs,
-  limit,
-  query,
-  updateDoc,
-  where,
+  // getDocs,
+  // limit,
+  // query,
+  // updateDoc,
+  // where,
 } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import { clearCart } from "../redux/slices/cartSlice";
-import type { Premise } from "../types";
+// import type { Premise } from "../types";
 
 const paymentMethods = [
   {
@@ -51,7 +51,7 @@ export default function PaymentPage() {
   const outlet = useSelector((state: RootState) => state.outlet);
   const [loading, setLoading] = useState(false);
   const tableNo = localStorage.getItem("tableNo");
-  const outletId = outlet?.id;
+  // const outletId = outlet?.id;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const totalAmount = cart.reduce(
@@ -59,138 +59,139 @@ export default function PaymentPage() {
     0
   );
 
-  // swiggy zomao collection const handlePlaceOrder = () => {
+  // swiggy zomao collection
+  //  const handlePlaceOrder = () => {
   //   if (!selectedMethod) return
 
   //   localStorage.setItem("selectedPaymentMethod", selectedMethod)
   //   navigate("/order-success")
   // }
 
-  // const handlePlaceOrder = async () => {
-  //   if (!selectedMethod) return;
-  //   setLoading(true);
-  //   const mobile = localStorage.getItem("customerMobile");
-  //   if (!mobile || cart.length === 0 || !outlet.id) return;
+  const handlePlaceOrder = async () => {
+    if (!selectedMethod) return;
+    setLoading(true);
+    const mobile = localStorage.getItem("customerMobile");
+    if (!mobile || cart.length === 0 || !outlet.id) return;
 
-  //   const orderId = uuidv4(); // or your own logic
-  //   const orderDateTime = Date.now().toString();
+    const orderId = uuidv4(); // or your own logic
+    const orderDateTime = Date.now().toString();
 
-  //   const orderItems = cart.map((item) => ({
-  //     addons: [],
-  //     cgst: 0,
-  //     cgst_percent: 0,
-  //     discount: 0,
-  //     dish: [],
-  //     gst: 0,
-  //     gst_percent: 0,
-  //     instructions: "",
-  //     item_id: item.id,
-  //     item_name: item.name,
-  //     item_quantity: item.quantity,
-  //     item_unit_price: item.price,
-  //     packaging: 0,
-  //     packaging_cgst: 0,
-  //     packaging_cgst_percent: 0,
-  //     packaging_gst: 0,
-  //     packaging_sgst: 0,
-  //     packaging_sgst_percent: 0,
-  //     sgst: 0,
-  //     sgst_percent: 0,
-  //     subtotal: item.quantity * item.price,
-  //     variants: [],
-  //     wera_item_id: 0,
-  //   }));
+    const orderItems = cart.map((item) => ({
+      addons: [],
+      cgst: 0,
+      cgst_percent: 0,
+      discount: 0,
+      dish: [],
+      gst: 0,
+      gst_percent: 0,
+      instructions: "",
+      item_id: item.id,
+      item_name: item.name,
+      item_quantity: item.quantity,
+      item_unit_price: item.price,
+      packaging: 0,
+      packaging_cgst: 0,
+      packaging_cgst_percent: 0,
+      packaging_gst: 0,
+      packaging_sgst: 0,
+      packaging_sgst_percent: 0,
+      sgst: 0,
+      sgst_percent: 0,
+      subtotal: item.quantity * item.price,
+      variants: [],
+      wera_item_id: 0,
+    }));
 
-  //   const orderPayload = {
-  //     cgst: 0,
-  //     customer_details: {
-  //       address: "",
-  //       address_type: "",
-  //       city: "",
-  //       country: "India",
-  //       customer_id: "",
-  //       delivery_area: "",
-  //       delivery_coordinates_type: "",
-  //       name: "",
-  //       order_instructions: "",
-  //       phone_number: mobile,
-  //       pincode: "",
-  //       state: "",
-  //     },
-  //     dayId: dayjs().format("YYYY-MM-DD"),
-  //     delivery_charge: 0,
-  //     discount: 0,
-  //     discount_reason: "",
-  //     enable_delivery: 0,
-  //     expected_delivery_time: "",
-  //     external_order_id: "",
-  //     foodready: 0,
-  //     gross_amount: cart.reduce(
-  //       (sum, item) => sum + item.price * item.quantity,
-  //       0
-  //     ),
-  //     gst: 0,
-  //     id: orderId,
-  //     is_bill_printed: false,
-  //     is_edit: false,
-  //     is_kot_printed: false,
-  //     is_pop_order: false,
-  //     net_amount: cart.reduce(
-  //       (sum, item) => sum + item.price * item.quantity,
-  //       0
-  //     ),
-  //     order_date_time: orderDateTime,
-  //     order_from: "WEB_APP",
-  //     order_id: Math.floor(Math.random() * 1000000), // or use timestamp
-  //     order_instructions: "",
-  //     order_items: orderItems,
-  //     order_otp: "",
-  //     order_packaging: 0,
-  //     order_taker: false,
-  //     order_type: "ONLINE",
-  //     packaging: 0,
-  //     packaging_cgst: 0,
-  //     packaging_cgst_percent: 0,
-  //     packaging_sgst: 0,
-  //     packaging_sgst_percent: 0,
-  //     payment_mode: selectedMethod,
-  //     rStatus: "PENDING",
-  //     rejection_id: 0,
-  //     rejection_msg: "",
-  //     restaurant_address: "",
-  //     restaurant_id: 0,
-  //     restaurant_name: outlet.name,
-  //     restaurant_number: "",
-  //     rider: {
-  //       arrival_time: "",
-  //       is_rider_available: false,
-  //       otp: "",
-  //       otp_message: "",
-  //       rider_name: "",
-  //       rider_number: "",
-  //       rider_status: "pending",
-  //       time_to_arrive: "",
-  //     },
-  //     sgst: 0,
-  //     showOTP: "",
-  //     status: "pending",
-  //     taxes: [],
-  //   };
+    const orderPayload = {
+      cgst: 0,
+      customer_details: {
+        address: tableNo?.toUpperCase() || "",
+        address_type: "",
+        city: "",
+        country: "India",
+        customer_id: "",
+        delivery_area: "",
+        delivery_coordinates_type: "",
+        name: "",
+        order_instructions: "",
+        phone_number: mobile,
+        pincode: "",
+        state: "",
+      },
+      dayId: dayjs().format("YYYY-MM-DD"),
+      delivery_charge: 0,
+      discount: 0,
+      discount_reason: "",
+      enable_delivery: 0,
+      expected_delivery_time: "",
+      external_order_id: "",
+      foodready: 0,
+      gross_amount: cart.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      ),
+      gst: 0,
+      id: orderId,
+      is_bill_printed: false,
+      is_edit: false,
+      is_kot_printed: false,
+      is_pop_order: false,
+      net_amount: cart.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      ),
+      order_date_time: orderDateTime,
+      order_from: "WEB_APP",
+      order_id: Math.floor(Math.random() * 1000000), // or use timestamp
+      order_instructions: "",
+      order_items: orderItems,
+      order_otp: "",
+      order_packaging: 0,
+      order_taker: false,
+      order_type: "ONLINE",
+      packaging: 0,
+      packaging_cgst: 0,
+      packaging_cgst_percent: 0,
+      packaging_sgst: 0,
+      packaging_sgst_percent: 0,
+      payment_mode: selectedMethod,
+      rStatus: "PENDING",
+      rejection_id: 0,
+      rejection_msg: "",
+      restaurant_address: "",
+      restaurant_id: 0,
+      restaurant_name: outlet.name,
+      restaurant_number: "",
+      rider: {
+        arrival_time: "",
+        is_rider_available: false,
+        otp: "",
+        otp_message: "",
+        rider_name: "",
+        rider_number: "",
+        rider_status: "pending",
+        time_to_arrive: "",
+      },
+      sgst: 0,
+      showOTP: "",
+      status: "pending",
+      taxes: [],
+    };
 
-  //   try {
-  //     const outletRef = doc(db, "OUTLET", outlet.id);
-  //     await addDoc(collection(outletRef, "ONLINE_ORDERS"), orderPayload);
-  //     dispatch(clearCart())
-  //     setLoading(false);
-  //     localStorage.setItem("selectedPaymentMethod", selectedMethod);
-  //     navigate(`/${outlet.id}/${tableNo}/order-success`);
-  //     // navigate("/order-success")
-  //   } catch (error) {
-  //     setLoading(false);
-  //     console.error("Failed to place order:", error);
-  //     alert("Failed to place order. Please try again.");
-  //   }
-  // };
+    try {
+      const outletRef = doc(db, "OUTLET", outlet.id);
+      await addDoc(collection(outletRef, "ONLINE_ORDERS"), orderPayload);
+      dispatch(clearCart())
+      setLoading(false);
+      localStorage.setItem("selectedPaymentMethod", selectedMethod);
+      navigate(`/${outlet.id}/${tableNo}/order-success`);
+      // navigate("/order-success")
+    } catch (error) {
+      setLoading(false);
+      console.error("Failed to place order:", error);
+      alert("Failed to place order. Please try again.");
+    }
+  };
 //eorking Code Bewlo
   // const handleSaveCaptainOrder = async () => {
   //   setLoading(true);
@@ -370,201 +371,201 @@ export default function PaymentPage() {
 
 
 
-const handleSaveCaptainOrder = async () => {
-  setLoading(true);
-  try {
-    // Step 1: Fetch premise info
-    const prodRef = query(collection(db, "OUTLET", outletId, "PREMISES"), limit(1));
-    const prodSnap = await getDocs(prodRef);
-    const firstItem = !prodSnap.empty
-      ? { id: prodSnap.docs[0].id, ...prodSnap.docs[0].data() } as Premise
-      : null;
+// const handleSaveCaptainOrder = async () => {
+//   setLoading(true);
+//   try {
+//     // Step 1: Fetch premise info
+//     const prodRef = query(collection(db, "OUTLET", outletId, "PREMISES"), limit(1));
+//     const prodSnap = await getDocs(prodRef);
+//     const firstItem = !prodSnap.empty
+//       ? { id: prodSnap.docs[0].id, ...prodSnap.docs[0].data() } as Premise
+//       : null;
 
-    const premise = firstItem?.name;
-    const premiseType = firstItem?.type;
-    let tableNumberOnly = tableNo?.replace(/^table/i, "") || "";
-    const groupID = tableNumberOnly;
-    const now = Date.now();
-    const billId = now;
+//     const premise = firstItem?.name;
+//     const premiseType = firstItem?.type;
+//     let tableNumberOnly = tableNo?.replace(/^table/i, "") || "";
+//     const groupID = tableNumberOnly;
+//     const now = Date.now();
+//     const billId = now;
 
-    const captainTabId = "4zqeYYHPoEpQ6CADLgsI";
-    const serailNo = uuidv4().replace(/-/g, "").slice(0, 16);
-    const userId = "bev6xlEqb8ZkaHs44S3KTRORDXu1";
+//     const captainTabId = "4zqeYYHPoEpQ6CADLgsI";
+//     const serailNo = uuidv4().replace(/-/g, "").slice(0, 16);
+//     const userId = "bev6xlEqb8ZkaHs44S3KTRORDXu1";
 
-    // Step 2: Build billItems and kotList
-    const billItems = cart.map((item, idx) => ({
-      // ...same as before
-      bags: 1.0,
-      barcode: "0",
-      billId,
-      canWeight: false,
-      categoryId: item.category || "",
-      cess: 0.0,
-      code: 2,
-      createdDate: 0,
-      discountAmount: 0.0,
-      discountPercent: 0.0,
-      duration: 0.0,
-      hsnCode: "0",
-      id: billId + idx + 1,
-      isKOTDone: true,
-      isOutOfStock: false,
-      kitchenId: "LiFtRL8L9ywkQ0xvE1yt",
-      mrpPrice: 0.0,
-      name: item.name,
-      percentage: 0.0,
-      price: item.price,
-      productId: item.id,
-      quantity: item.quantity,
-      regionalName: item.regionalName || "",
-      roomsDays: 0.0,
-      roomsFlag: false,
-      selected: true,
-      state: 0,
-      stockable: false,
-      taxIndex: 2,
-      total: item.price * item.quantity,
-      unitId: 0,
-      updatedDate: 0,
-      viewType: 0,
-      weightValue: 0.0,
-    }));
+//     // Step 2: Build billItems and kotList
+//     const billItems = cart.map((item, idx) => ({
+//       // ...same as before
+//       bags: 1.0,
+//       barcode: "0",
+//       billId,
+//       canWeight: false,
+//       categoryId: item.category || "",
+//       cess: 0.0,
+//       code: 2,
+//       createdDate: 0,
+//       discountAmount: 0.0,
+//       discountPercent: 0.0,
+//       duration: 0.0,
+//       hsnCode: "0",
+//       id: billId + idx + 1,
+//       isKOTDone: true,
+//       isOutOfStock: false,
+//       kitchenId: "LiFtRL8L9ywkQ0xvE1yt",
+//       mrpPrice: 0.0,
+//       name: item.name,
+//       percentage: 0.0,
+//       price: item.price,
+//       productId: item.id,
+//       quantity: item.quantity,
+//       regionalName: item.regionalName || "",
+//       roomsDays: 0.0,
+//       roomsFlag: false,
+//       selected: true,
+//       state: 0,
+//       stockable: false,
+//       taxIndex: 2,
+//       total: item.price * item.quantity,
+//       unitId: 0,
+//       updatedDate: 0,
+//       viewType: 0,
+//       weightValue: 0.0,
+//     }));
 
-    const kotList = [
-      {
-        dateTime: dayjs().format("MMM DD, YYYY h:mm:ss A"),
-        id: 1,
-        items: cart.map((item, idx) => ({
-          id: idx + 1,
-          itemName: item.name,
-          kotId: 1,
-          productId: item?.id,
-          quantity: item.quantity,
-          state: 0,
-        })),
-        kitchenId: "LiFtRL8L9ywkQ0xvE1yt",
-        serialNo: String(billId),
-        state: 0,
-        table: tableNo,
-        userId: 0,
-      },
-    ];
+//     const kotList = [
+//       {
+//         dateTime: dayjs().format("MMM DD, YYYY h:mm:ss A"),
+//         id: 1,
+//         items: cart.map((item, idx) => ({
+//           id: idx + 1,
+//           itemName: item.name,
+//           kotId: 1,
+//           productId: item?.id,
+//           quantity: item.quantity,
+//           state: 0,
+//         })),
+//         kitchenId: "LiFtRL8L9ywkQ0xvE1yt",
+//         serialNo: String(billId),
+//         state: 0,
+//         table: tableNo,
+//         userId: 0,
+//       },
+//     ];
 
-    const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const taxAmount = Math.round(total * 0.05 * 10) / 10;
-    const finalTotal = total + taxAmount;
+//     const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+//     const taxAmount = Math.round(total * 0.05 * 10) / 10;
+//     const finalTotal = total + taxAmount;
 
-    const newTableDetailsObj = {
-      // Same as before...
-      balance: finalTotal,
-      billItems,
-      billPrintCount: 0,
-      billType: premise,
-      captainTabId,
-      cashTenderAmt: 0.0,
-      cessAmount: 0.0,
-      changeAmt: 0.0,
-      checkInTime: billId,
-      checkOutTime: 0,
-      createdDate: billId,
-      customerBillAdvance: 0.0,
-      customerId: "",
-      days: 0,
-      discount: 0.0,
-      discountPercent: 0.0,
-      duration: 0.0,
-      estimate: false,
-      finalTotal,
-      gstFlag: false,
-      id: billId,
-      isKOTDone: true,
-      isSelected: true,
-      kotList,
-      noOfPerson: 0,
-      parcelCharges: 0.0,
-      paymentMode: 0,
-      percentage: 0.0,
-      roundOff: Math.round((finalTotal - Math.floor(finalTotal)) * 100) / 100,
-      serviceChargeAmount: 0.0,
-      serviceChargePercent: 0.0,
-      settled: false,
-      state: 1,
-      table: JSON.stringify([
-        {
-          table_no: tableNumberOnly,
-          premise,
-          premise_type: premiseType,
-          view_type: 0,
-          group_id: tableNumberOnly,
-          booked: true,
-          settled: false,
-        },
-      ]),
-      taxAmount,
-      taxState: 0,
-      total,
-      updatedDate: 0,
-      userId,
-      viewType: 2,
-    };
+//     const newTableDetailsObj = {
+//       // Same as before...
+//       balance: finalTotal,
+//       billItems,
+//       billPrintCount: 0,
+//       billType: premise,
+//       captainTabId,
+//       cashTenderAmt: 0.0,
+//       cessAmount: 0.0,
+//       changeAmt: 0.0,
+//       checkInTime: billId,
+//       checkOutTime: 0,
+//       createdDate: billId,
+//       customerBillAdvance: 0.0,
+//       customerId: "",
+//       days: 0,
+//       discount: 0.0,
+//       discountPercent: 0.0,
+//       duration: 0.0,
+//       estimate: false,
+//       finalTotal,
+//       gstFlag: false,
+//       id: billId,
+//       isKOTDone: true,
+//       isSelected: true,
+//       kotList,
+//       noOfPerson: 0,
+//       parcelCharges: 0.0,
+//       paymentMode: 0,
+//       percentage: 0.0,
+//       roundOff: Math.round((finalTotal - Math.floor(finalTotal)) * 100) / 100,
+//       serviceChargeAmount: 0.0,
+//       serviceChargePercent: 0.0,
+//       settled: false,
+//       state: 1,
+//       table: JSON.stringify([
+//         {
+//           table_no: tableNumberOnly,
+//           premise,
+//           premise_type: premiseType,
+//           view_type: 0,
+//           group_id: tableNumberOnly,
+//           booked: true,
+//           settled: false,
+//         },
+//       ]),
+//       taxAmount,
+//       taxState: 0,
+//       total,
+//       updatedDate: 0,
+//       userId,
+//       viewType: 2,
+//     };
 
-    const outletRef = doc(db, "OUTLET", outlet.id);
-    const captainOrderQuery = query(
-      collection(outletRef, "CAPTAIN_ORDER"),
-      where("groupID", "==", Number(groupID))
-    );
+//     const outletRef = doc(db, "OUTLET", outlet.id);
+//     const captainOrderQuery = query(
+//       collection(outletRef, "CAPTAIN_ORDER"),
+//       where("groupID", "==", Number(groupID))
+//     );
 
-    const existingDocsSnap = await getDocs(captainOrderQuery);
+//     const existingDocsSnap = await getDocs(captainOrderQuery);
 
-    if (!existingDocsSnap.empty) {
-      // Existing doc found → update
-      const docToUpdate = existingDocsSnap.docs[0];
-      const data = docToUpdate.data();
-      const existingDetails = JSON.parse(data.tableDetails || "{}");
+//     if (!existingDocsSnap.empty) {
+//       // Existing doc found → update
+//       const docToUpdate = existingDocsSnap.docs[0];
+//       const data = docToUpdate.data();
+//       const existingDetails = JSON.parse(data.tableDetails || "{}");
 
-      // Merge billItems
-      const updatedBillItems = [...(existingDetails.billItems || []), ...billItems];
+//       // Merge billItems
+//       const updatedBillItems = [...(existingDetails.billItems || []), ...billItems];
 
-      // Merge total
-      const updatedTotal = updatedBillItems.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-      );
-      const updatedTaxAmount = Math.round(updatedTotal * 0.05 * 10) / 10;
-      const updatedFinalTotal = updatedTotal + updatedTaxAmount;
+//       // Merge total
+//       const updatedTotal = updatedBillItems.reduce(
+//         (sum, item) => sum + item.price * item.quantity,
+//         0
+//       );
+//       const updatedTaxAmount = Math.round(updatedTotal * 0.05 * 10) / 10;
+//       const updatedFinalTotal = updatedTotal + updatedTaxAmount;
 
-      existingDetails.billItems = updatedBillItems;
-      existingDetails.total = updatedTotal;
-      existingDetails.finalTotal = updatedFinalTotal;
-      existingDetails.taxAmount = updatedTaxAmount;
+//       existingDetails.billItems = updatedBillItems;
+//       existingDetails.total = updatedTotal;
+//       existingDetails.finalTotal = updatedFinalTotal;
+//       existingDetails.taxAmount = updatedTaxAmount;
 
-      await updateDoc(docToUpdate.ref, {
-        flag: "update", // ✅ Ensure the flag is updated
-        tableDetails: JSON.stringify(existingDetails),
-      });
+//       await updateDoc(docToUpdate.ref, {
+//         flag: "update", // ✅ Ensure the flag is updated
+//         tableDetails: JSON.stringify(existingDetails),
+//       });
 
-    } else {
-      // No existing doc → add new
-      const newCaptainOrderDoc = {
-        flag: "input",
-        groupID: Number(groupID),
-        id: captainTabId,
-        serailNo,
-        tableDetails: JSON.stringify(newTableDetailsObj),
-      };
+//     } else {
+//       // No existing doc → add new
+//       const newCaptainOrderDoc = {
+//         flag: "input",
+//         groupID: Number(groupID),
+//         id: captainTabId,
+//         serailNo,
+//         tableDetails: JSON.stringify(newTableDetailsObj),
+//       };
 
-      await addDoc(collection(outletRef, "CAPTAIN_ORDER"), newCaptainOrderDoc);
-    }
+//       await addDoc(collection(outletRef, "CAPTAIN_ORDER"), newCaptainOrderDoc);
+//     }
 
-    dispatch(clearCart());
-    navigate(`/${outlet.id}/${tableNo}/order-success`);
-  } catch (error) {
-    console.error("Failed to place Captain Order:", error);
-    alert("Failed to place Captain Order. Please try again.");
-  } finally {
-    setLoading(false);
-  }
-};
+//     dispatch(clearCart());
+//     navigate(`/${outlet.id}/${tableNo}/order-success`);
+//   } catch (error) {
+//     console.error("Failed to place Captain Order:", error);
+//     alert("Failed to place Captain Order. Please try again.");
+//   } finally {
+//     setLoading(false);
+//   }
+// };
 
 
   return (
@@ -652,8 +653,8 @@ const handleSaveCaptainOrder = async () => {
 
       <div className="fixed bottom-16 left-0 right-0 bg-white border-t p-4">
         <button
-          // onClick={handlePlaceOrder}
-          onClick={handleSaveCaptainOrder}
+          onClick={handlePlaceOrder}
+          // onClick={handleSaveCaptainOrder}
           disabled={!selectedMethod || loading}
           className={`w-full py-4 rounded-lg font-semibold text-lg flex items-center justify-center ${
             selectedMethod && !loading
