@@ -72,15 +72,13 @@ export default function PaymentPage() {
     setLoading(true);
     const mobile = localStorage.getItem("customerMobile");
     if (!mobile || cart.length === 0 || !outlet.id) return;
-
-    function generateUniqueNumber(digits = 8) {
+function generateUniqueNumber(digits = 10) {
   const min = Math.pow(10, digits - 1);
   const max = Math.pow(10, digits) - 1;
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  return (Math.floor(Math.random() * (max - min + 1)) + min).toString();
 }
 
-const externalOrderId = generateUniqueNumber();  // Example: 7834562190
-
+const externalOrderId = generateUniqueNumber(); // Example: "7834562190"
     const orderId = uuidv4(); // or your own logic
     const orderDateTime = Date.now().toString();
 
@@ -132,7 +130,7 @@ const externalOrderId = generateUniqueNumber();  // Example: 7834562190
       discount_reason: "",
       enable_delivery: 0,
       expected_delivery_time: "",
-      external_order_id: externalOrderId,
+      external_order_id:externalOrderId,
       foodready: 0,
       gross_amount: cart.reduce(
         (sum, item) => sum + item.price * item.quantity,
