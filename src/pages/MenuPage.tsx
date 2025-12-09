@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { doc, collection, getDoc, getDocs } from "firebase/firestore";
+import {
+  doc,
+  collection,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import Header from "../components/Header";
 import CategorySlider from "../components/CategorySlider";
 import MenuItemCard from "../components/MenuItemCard";
@@ -49,21 +56,47 @@ export default function MenuPage() {
         setOutletInfo(outletSnap.data());
 
         // Fetch categories
-        const catRef = collection(db, "OUTLET", outletId, "CATEGORY");
+        // const catRef = collection(db, "OUTLET", outletId, "CATEGORY");
+        // const catSnap = await getDocs(catRef);
+        // const catList = catSnap.docs.map((doc) => ({
+        //   id: doc.id,
+        //   ...doc.data(),
+        // })) as { id: string; name: string }[];
+        // setCategories([{ id: "all", name: "All" }, ...catList]);
+        const catRef = query(
+          collection(db, "OUTLET", outletId, "CATEGORY"),
+          where("onlineSynced", "==", false)
+        );
+
         const catSnap = await getDocs(catRef);
+
         const catList = catSnap.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         })) as { id: string; name: string }[];
+
         setCategories([{ id: "all", name: "All" }, ...catList]);
 
         // Fetch products
-        const prodRef = collection(db, "OUTLET", outletId, "PRODUCT");
+        // const prodRef = collection(db, "OUTLET", outletId, "PRODUCT");
+        // const prodSnap = await getDocs(prodRef);
+        // const prodList = prodSnap.docs.map((doc) => ({
+        //   id: doc.id,
+        //   ...doc.data(),
+        // })) as MenuItem[];
+        // setProducts(prodList);
+        const prodRef = query(
+          collection(db, "OUTLET", outletId, "PRODUCT"),
+          where("onlineSynced", "==", false)
+        );
+
         const prodSnap = await getDocs(prodRef);
+
         const prodList = prodSnap.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         })) as MenuItem[];
+
         setProducts(prodList);
       } catch (err) {
         console.error("Error fetching menu data:", err);
@@ -85,7 +118,7 @@ export default function MenuPage() {
         ? item.name.toLowerCase().includes(searchQuery.toLowerCase())
         : true
     );
-// console.log(filteredItems)
+  // console.log(filteredItems)
   const getItemQuantity = (itemId: string) =>
     cart.find((item) => item.id === itemId)?.quantity || 0;
 
