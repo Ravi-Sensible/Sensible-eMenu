@@ -76,12 +76,13 @@ export default function UrbanPiperRequestPage() {
     setError("");
 
     try {
-      const variants = [mobile, `+91${mobile}`];
+    //   const variants = [`+91${mobile}`,mobile, ];
+      const variants =`+91${mobile}`;
 
       // Check USER_PROFILE
       const userQuery = query(
         collection(db, "USER_PROFILE"),
-        where("mobile", "in", variants)
+        where("mobile", "==", variants)
       );
       const userSnap = await getDocs(userQuery);
 
@@ -98,10 +99,9 @@ export default function UrbanPiperRequestPage() {
       } as UserProfile;
 
       setUser(userData);
-
       // Load Outlets
       const outletList: Outlet[] = [];
-      for (const outletId of userData.outlets || []) {
+      for (const outletId of userData?.outlets || []) {
         const outletSnap = await getDoc(doc(db, "OUTLET", outletId));
         if (outletSnap.exists()) {
           outletList.push({
