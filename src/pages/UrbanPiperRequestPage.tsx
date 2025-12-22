@@ -15,7 +15,7 @@ import splashLogo from "../assets/splashLogo3.png";
 interface Outlet {
   id: string;
   name: string;
-  address: string;
+  branch?: string;
   mobile?: string;
   ownerName?: string;
   ownerPhone?: string;
@@ -271,7 +271,7 @@ export default function UrbanPiperRequestPage() {
                     className="w-full border-2 border-gray-200 rounded-xl p-5 text-left hover:border-blue-500 hover:bg-blue-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <p className="font-semibold text-lg text-gray-800">{outlet.name}</p>
-                    <p className="text-sm text-gray-600 mt-1">{outlet.address}</p>
+                    <p className="text-sm text-gray-600 mt-1">{outlet?.branch}</p>
                   </button>
                 ))}
               </div>
@@ -418,7 +418,7 @@ function UrbanPiperForm({
     owners_contact_phone: outlet.ownerPhone || userMobile || "",
     owners_contact_email: outlet.ownerEmail || "",
     country: "India",
-    street_address: outlet.address || "",
+    street_address: outlet?.branch || "",
     city: "",
     postal_code: "",
     state: "",
