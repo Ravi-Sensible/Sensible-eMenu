@@ -315,7 +315,7 @@ export default function UrbanPiperRequestPage() {
                 <StepItem 
                   number={1} 
                   title="Onboarding Form Submitted" 
-                  description="We'll verify your restaurant details"
+                  description="Thank You For Register"
                   completed={true}
                 />
                 <StepItem 
