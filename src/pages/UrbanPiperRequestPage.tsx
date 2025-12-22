@@ -207,7 +207,7 @@ export default function UrbanPiperRequestPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Mobile Number
                   </label>
-                  <div className="flex gap-3">
+                  <div className="flex flex-col gap-3">
                     <div className="flex-1 relative">
                       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
                         +91
@@ -229,7 +229,7 @@ export default function UrbanPiperRequestPage() {
                     <button
                       onClick={handleSearch}
                       disabled={loading || mobile.length !== 10}
-                      className="bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition"
+                      className="w-[50%] bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition"
                     >
                       {loading ? "Checking..." : "Continue"}
                     </button>
