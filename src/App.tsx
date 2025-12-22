@@ -14,17 +14,19 @@ import OrderSuccessPage from './pages/OrderSuccessPage'
 import OutletLoader from './components/OutletLoader'
 import EMenuPage from './pages/EMenuPage'
 import OrdersPage from './pages/OrdersPage'
+import UrbanPiperRequestPage from './pages/UrbanPiperRequestPage'
 
 function AppRoutes() {
   const location = useLocation()
 
   // Hide BottomNavigation on /:outletId/eMenu route
-  const isEMenu = /^\/[^/]+\/eMenu$/.test(location.pathname)
+  const isEMenu =   /^\/[^/]+\/eMenu$/.test(location.pathname) || location.pathname === "/onboard-swiggy-zomato";
 
   return (
     <div className="App">
       <Routes>
         {/* eMenu route */}
+        <Route path='/onboard-swiggy-zomato' element={<UrbanPiperRequestPage/>}/>
         <Route path="/:outletId/eMenu" element={<EMenuPage />} />
 
         {/* Main flow routes */}
@@ -36,6 +38,7 @@ function AppRoutes() {
           <Route path="order-success" element={<OrderSuccessPage />} />
           <Route path="orders" element={<OrdersPage />} />
         </Route>
+
       </Routes>
 
       {/* Conditionally show BottomNavigation */}
