@@ -183,10 +183,10 @@ export default function UrbanPiperRequestPage() {
             }}
           />
           <h1 className="text-3xl font-bold text-white mb-2">
-            Get Swiggy & Zomato
+           Festive Loyalty Rewards Program
           </h1>
           <p className="text-blue-100">
-            Integrate your sensible billing with top food delivery platforms
+          As a special benefit, the first 75 existing customers to register will receive FREE Swiggy & Zomato integration with their existing Sensible Billing Machine.
           </p>
         </div>
 
