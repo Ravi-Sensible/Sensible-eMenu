@@ -128,33 +128,41 @@ export default function UrbanPiperRequestPage() {
   };
 
   // Select Outlet
-  const handleSelectOutlet = async (outlet: Outlet) => {
-    setLoading(true);
-    setError("");
+ const handleSelectOutlet = async (outlet: Outlet) => {
+  setLoading(true);
+  setError("");
 
-    try {
-      // Check if outlet already has a request
-      const existingQuery = query(
-        collection(db, "URBAN_PIPER"),
-        where("outletId", "==", outlet.id)
-      );
-      const existingSnap = await getDocs(existingQuery);
+  try {
+    const existingQuery = query(
+      collection(db, "URBAN_PIPER"),
+      where("outletId", "==", outlet.id)
+    );
 
-      if (!existingSnap.empty) {
+    const existingSnap = await getDocs(existingQuery);
+
+    if (!existingSnap.empty) {
+      // Take first matching document
+      const docData = existingSnap.docs[0].data();
+
+      // ✅ Check source condition
+      if (docData?.source === "OFFER") {
         setStep("success");
-        setLoading(false);
         return;
       }
-
-      setSelectedOutlet(outlet);
-      setStep("form");
-    } catch (err) {
-      console.error("Outlet selection error:", err);
-      setError("An error occurred. Please try again.");
-    } finally {
-      setLoading(false);
     }
-  };
+
+    // ✅ Either no doc OR source missing OR source not OFFER
+    setSelectedOutlet(outlet);
+    setStep("form");
+
+  } catch (err) {
+    console.error("Outlet selection error:", err);
+    setError("An error occurred. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleFormSuccess = () => {
     setStep("success");
