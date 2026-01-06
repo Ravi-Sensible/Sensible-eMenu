@@ -14,6 +14,10 @@ import {
   addDoc,
   collection,
   doc,
+  getDocs,
+  limit,
+  query,
+  where,
   // getDocs,
   // limit,
   // query,
@@ -22,7 +26,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import { clearCart } from "../redux/slices/cartSlice";
-// import type { Premise } from "../types";
+import type { Premise } from "../types";
 
 const paymentMethods = [
   {
@@ -67,312 +71,347 @@ export default function PaymentPage() {
   //   navigate("/order-success")
   // }
 
-  const handlePlaceOrder = async () => {
-    if (!selectedMethod) return;
+//   const handlePlaceOrder = async () => {
+//     if (!selectedMethod) return;
+//     setLoading(true);
+//     const mobile = localStorage.getItem("customerMobile");
+//     if (!mobile || cart.length === 0 || !outlet.id) return;
+// function generateUniqueNumber(digits = 10) {
+//   const min = Math.pow(10, digits - 1);
+//   const max = Math.pow(10, digits) - 1;
+//   return (Math.floor(Math.random() * (max - min + 1)) + min).toString();
+// }
+
+// const externalOrderId = generateUniqueNumber(); // Example: "7834562190"
+//     const orderId = uuidv4(); // or your own logic
+//     const orderDateTime = Date.now().toString();
+
+//     const orderItems = cart.map((item) => ({
+//       addons: [],
+//       cgst: 0,
+//       cgst_percent: 0,
+//       discount: 0,
+//       dish: [],
+//       gst: 0,
+//       gst_percent: 0,
+//       instructions: "",
+//       item_id: item.id,
+//       item_name: item.name,
+//       item_quantity: item.quantity,
+//       item_unit_price: item.price,
+//       packaging: 0,
+//       packaging_cgst: 0,
+//       packaging_cgst_percent: 0,
+//       packaging_gst: 0,
+//       packaging_sgst: 0,
+//       packaging_sgst_percent: 0,
+//       sgst: 0,
+//       sgst_percent: 0,
+//       subtotal: item.quantity * item.price,
+//       variants: [],
+//       wera_item_id: 0,
+//     }));
+
+//     const orderPayload = {
+//       cgst: 0,
+//       customer_details: {
+//         address: tableNo?.toUpperCase() || "",
+//         address_type: "",
+//         city: "",
+//         country: "India",
+//         customer_id: "",
+//         delivery_area: "",
+//         delivery_coordinates_type: "",
+//         name: "",
+//         order_instructions: "",
+//         phone_number: mobile,
+//         pincode: "",
+//         state: "",
+//       },
+//       dayId: dayjs().format("YYYY-MM-DD"),
+//       delivery_charge: 0,
+//       discount: 0,
+//       discount_reason: "",
+//       enable_delivery: 0,
+//       expected_delivery_time: "",
+//       external_order_id:externalOrderId,
+//       foodready: 0,
+//       gross_amount: cart.reduce(
+//         (sum, item) => sum + item.price * item.quantity,
+//         0
+//       ),
+//       gst: 0,
+//       id: orderId,
+//       is_bill_printed: false,
+//       is_edit: false,
+//       is_kot_printed: false,
+//       is_pop_order: false,
+//       net_amount: cart.reduce(
+//         (sum, item) => sum + item.price * item.quantity,
+//         0
+//       ),
+//       order_date_time: orderDateTime,
+//       order_from: "WEB_APP",
+//       order_id: Math.floor(Math.random() * 1000000), // or use timestamp
+//       order_instructions: "",
+//       order_items: orderItems,
+//       order_otp: "",
+//       order_packaging: 0,
+//       order_taker: false,
+//       order_type: "ONLINE",
+//       packaging: 0,
+//       packaging_cgst: 0,
+//       packaging_cgst_percent: 0,
+//       packaging_sgst: 0,
+//       packaging_sgst_percent: 0,
+//       payment_mode: selectedMethod,
+//       rStatus: "PENDING",
+//       rejection_id: 0,
+//       rejection_msg: "",
+//       restaurant_address: "",
+//       restaurant_id: 0,
+//       restaurant_name: outlet.name,
+//       restaurant_number: "",
+//       rider: {
+//         arrival_time: "",
+//         is_rider_available: false,
+//         otp: "",
+//         otp_message: "",
+//         rider_name: "",
+//         rider_number: "",
+//         rider_status: "pending",
+//         time_to_arrive: "",
+//       },
+//       sgst: 0,
+//       showOTP: "",
+//       status: "pending",
+//       taxes: [],
+//     };
+
+//     try {
+//       const outletRef = doc(db, "OUTLET", outlet.id);
+//       await addDoc(collection(outletRef, "ONLINE_ORDERS"), orderPayload);
+//       dispatch(clearCart())
+//       setLoading(false);
+//       localStorage.setItem("selectedPaymentMethod", selectedMethod);
+//       navigate(`/${outlet.id}/${tableNo}/order-success`);
+//       // navigate("/order-success")
+//     } catch (error) {
+//       setLoading(false);
+//       console.error("Failed to place order:", error);
+//       alert("Failed to place order. Please try again.");
+//     }
+//   };
+//working Code Bewlo
+
+  const handleSaveCaptainOrder = async () => {
     setLoading(true);
-    const mobile = localStorage.getItem("customerMobile");
-    if (!mobile || cart.length === 0 || !outlet.id) return;
-function generateUniqueNumber(digits = 10) {
-  const min = Math.pow(10, digits - 1);
-  const max = Math.pow(10, digits) - 1;
-  return (Math.floor(Math.random() * (max - min + 1)) + min).toString();
-}
+    const prodRef = query(
+      collection(db, "OUTLET",  outlet.id, "PREMISES"),
+      limit(1)
+    );
+    const prodSnap = await getDocs(prodRef);
 
-const externalOrderId = generateUniqueNumber(); // Example: "7834562190"
-    const orderId = uuidv4(); // or your own logic
-    const orderDateTime = Date.now().toString();
+    let firstItem = null;
 
-    const orderItems = cart.map((item) => ({
-      addons: [],
-      cgst: 0,
-      cgst_percent: 0,
-      discount: 0,
-      dish: [],
-      gst: 0,
-      gst_percent: 0,
-      instructions: "",
-      item_id: item.id,
-      item_name: item.name,
-      item_quantity: item.quantity,
-      item_unit_price: item.price,
-      packaging: 0,
-      packaging_cgst: 0,
-      packaging_cgst_percent: 0,
-      packaging_gst: 0,
-      packaging_sgst: 0,
-      packaging_sgst_percent: 0,
-      sgst: 0,
-      sgst_percent: 0,
-      subtotal: item.quantity * item.price,
-      variants: [],
-      wera_item_id: 0,
+    if (!prodSnap.empty) {
+      const doc = prodSnap.docs[0];
+      firstItem = {
+        id: doc.id,
+        ...doc.data(),
+      } as Premise;
+    }
+
+    let premise = firstItem?.name;
+    let premiseType = firstItem?.type;
+    // Remove 'table' prefix if your tableNo format is 'table6'
+    let tableNumberOnly = tableNo;
+    if (tableNo && tableNo.startsWith("table")) {
+      tableNumberOnly = tableNo.replace(/^table/i, "");
+    }
+
+    const now = Date.now();
+    const billId = now;
+    const groupID = tableNumberOnly; // set as per business logic
+    const captainTabId =  Date.now().toString();
+    const serailNo = uuidv4().replace(/-/g, "").slice(0, 16); // Example serial number, unique
+    const userId = "bev6xlEqb8ZkaHs44S3KTRORDXu1"; // or your session/user data
+
+    // (1) Build billItems, kotList, etc. as shown in previous answer
+    const billItems = cart.map((item, idx) => ({
+      bags: 1.0,
+      barcode: "0",
+      billId,
+      canWeight: false,
+      categoryId: item.category || "",
+      cess: 0.0,
+      code: 2,
+      createdDate: 0,
+      discountAmount: 0.0,
+      discountPercent: 0.0,
+      duration: 0.0,
+      hsnCode: "0",
+      id: billId + idx + 1,
+      isKOTDone: true,
+      isOutOfStock: false,
+      kitchenId: "LiFtRL8L9ywkQ0xvE1yt",
+      mrpPrice: 0.0,
+      name: item.name,
+      percentage: 0.0,
+      price: item.price,
+      productId: item.id,
+      quantity: item.quantity,
+      regionalName: item.regionalName || "",
+      roomsDays: 0.0,
+      roomsFlag: false,
+      selected: true,
+      state: 0,
+      stockable: false,
+      taxIndex: 2,
+      total: item.price * item.quantity,
+      unitId: 0,
+      updatedDate: 0,
+      viewType: 0,
+      weightValue: 0.0,
     }));
 
-    const orderPayload = {
-      cgst: 0,
-      customer_details: {
-        address: tableNo?.toUpperCase() || "",
-        address_type: "",
-        city: "",
-        country: "India",
-        customer_id: "",
-        delivery_area: "",
-        delivery_coordinates_type: "",
-        name: "",
-        order_instructions: "",
-        phone_number: mobile,
-        pincode: "",
-        state: "",
+    const kotList = [
+      {
+        dateTime: dayjs().format("MMM DD, YYYY h:mm:ss A"),
+        id: 1,
+        items: cart.map((item, idx) => ({
+          id: idx + 1,
+          itemName: item.name,
+          kotId: 1,
+          productId: item?.id,
+          quantity: item.quantity,
+          state: 0,
+        })),
+        kitchenId:Date.now().toString(),
+        serialNo: String(billId),
+        state: 0,
+        table: tableNo,
+        userId: 0,
       },
-      dayId: dayjs().format("YYYY-MM-DD"),
-      delivery_charge: 0,
-      discount: 0,
-      discount_reason: "",
-      enable_delivery: 0,
-      expected_delivery_time: "",
-      external_order_id:externalOrderId,
-      foodready: 0,
-      gross_amount: cart.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-      ),
-      gst: 0,
-      id: orderId,
-      is_bill_printed: false,
-      is_edit: false,
-      is_kot_printed: false,
-      is_pop_order: false,
-      net_amount: cart.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-      ),
-      order_date_time: orderDateTime,
-      order_from: "WEB_APP",
-      order_id: Math.floor(Math.random() * 1000000), // or use timestamp
-      order_instructions: "",
-      order_items: orderItems,
-      order_otp: "",
-      order_packaging: 0,
-      order_taker: false,
-      order_type: "ONLINE",
-      packaging: 0,
-      packaging_cgst: 0,
-      packaging_cgst_percent: 0,
-      packaging_sgst: 0,
-      packaging_sgst_percent: 0,
-      payment_mode: selectedMethod,
-      rStatus: "PENDING",
-      rejection_id: 0,
-      rejection_msg: "",
-      restaurant_address: "",
-      restaurant_id: 0,
-      restaurant_name: outlet.name,
-      restaurant_number: "",
-      rider: {
-        arrival_time: "",
-        is_rider_available: false,
-        otp: "",
-        otp_message: "",
-        rider_name: "",
-        rider_number: "",
-        rider_status: "pending",
-        time_to_arrive: "",
-      },
-      sgst: 0,
-      showOTP: "",
-      status: "pending",
-      taxes: [],
+    ];
+
+    const total = cart.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+    const taxAmount = Math.round(total * 0.05 * 10) / 10;
+    const finalTotal = total + taxAmount;
+
+    const tableDetailsObj = {
+      balance: finalTotal,
+      billItems,
+      billPrintCount: 0,
+      billType: premise,
+      captainTabId, // same as id
+      cashTenderAmt: 0.0,
+      cessAmount: 0.0,
+      changeAmt: 0.0,
+      checkInTime: billId,
+      checkOutTime: 0,
+      // kitchenId:Date.now().toString(),
+      createdDate: billId,
+      customerBillAdvance: 0.0,
+      customerId: "",
+      days: 0,
+      discount: 0.0,
+      discountPercent: 0.0,
+      duration: 0.0,
+      estimate: false,
+      finalTotal: finalTotal,
+      gstFlag: false,
+      id: billId,
+      isKOTDone: true,
+      isSelected: true,
+      kotList,
+      noOfPerson: 0,
+      parcelCharges: 0.0,
+      paymentMode: 0,
+      percentage: 0.0,
+      roundOff: Math.round((finalTotal - Math.floor(finalTotal)) * 100) / 100,
+      serviceChargeAmount: 0.0,
+      serviceChargePercent: 0.0,
+      settled: false,
+      state: 1,
+      table: JSON.stringify([
+        {
+          table_no: tableNumberOnly?.toString(),
+          premise: premise,
+          premise_type: premiseType,
+          view_type: 0,
+          group_id: tableNumberOnly,
+          booked: true,
+          settled: false,
+        },
+      ]),
+      taxAmount: taxAmount,
+      taxState: 0,
+      total: total,
+      updatedDate: 0,
+      userId,
+      viewType: 2,
     };
 
+    // (2) Build the Firestore document
+    const captainOrderDoc = {
+      flag: "input",
+      groupID: Number(groupID), // number
+      id: captainTabId, // string
+      serailNo, // string
+      tableDetails: JSON.stringify(tableDetailsObj), // Save as string
+    };
+
+    // (3) Save to Firestore "CAPTAIN_ORDER" subcollection
     try {
-      const outletRef = doc(db, "OUTLET", outlet.id);
-      await addDoc(collection(outletRef, "ONLINE_ORDERS"), orderPayload);
-      dispatch(clearCart())
-      setLoading(false);
-      localStorage.setItem("selectedPaymentMethod", selectedMethod);
-      navigate(`/${outlet.id}/${tableNo}/order-success`);
-      // navigate("/order-success")
-    } catch (error) {
-      setLoading(false);
-      console.error("Failed to place order:", error);
-      alert("Failed to place order. Please try again.");
-    }
+
+
+  const outletRef = doc(db, "OUTLET", outlet.id);
+  const captainOrderRef = collection(outletRef, "CAPTAIN_ORDER");
+
+  // 🔍 Check if same groupID order already exists & pending
+  const q = query(
+    captainOrderRef,
+    where("groupID", "==", Number(groupID)),
+    where("flag", "==", "input") // pending order
+  );
+
+  const snap = await getDocs(q);
+
+  if (!snap.empty) {
+    setLoading(false);
+    alert("Previous order is still pending for this group.");
+    return; // ⛔ stop execution
+  }
+
+
+  await addDoc(captainOrderRef, captainOrderDoc);
+
+  dispatch(clearCart());
+  setLoading(false);
+  navigate(`/${outlet.id}/${tableNo}/order-success`);
+
+} catch (error) {
+  setLoading(false);
+  console.error("Failed to place Captain Order:", error);
+  alert("Failed to place Captain Order. Please try again.");
+}
+    // try {
+    //   const outletRef = doc(db, "OUTLET", outlet.id);
+    //   await addDoc(collection(outletRef, "CAPTAIN_ORDER"), captainOrderDoc);
+    //   dispatch(clearCart());
+    //   setLoading(false);
+    //   navigate(`/${outlet.id}/${tableNo}/order-success`);
+    //   // Optionally, clear cart, redirect, etc
+    // } catch (error) {
+    //   setLoading(false);
+    //   console.error("Failed to place Captain Order:", error);
+    //   alert("Failed to place Captain Order. Please try again.");
+    // }
   };
-//eorking Code Bewlo
-  // const handleSaveCaptainOrder = async () => {
-  //   setLoading(true);
-  //   const prodRef = query(
-  //     collection(db, "OUTLET", outletId, "PREMISES"),
-  //     limit(1)
-  //   );
-  //   const prodSnap = await getDocs(prodRef);
-
-  //   let firstItem = null;
-
-  //   if (!prodSnap.empty) {
-  //     const doc = prodSnap.docs[0];
-  //     firstItem = {
-  //       id: doc.id,
-  //       ...doc.data(),
-  //     } as Premise;
-  //   }
-
-  //   let premise = firstItem?.name;
-  //   let premiseType = firstItem?.type;
-  //   // Remove 'table' prefix if your tableNo format is 'table6'
-  //   let tableNumberOnly = tableNo;
-  //   if (tableNo && tableNo.startsWith("table")) {
-  //     tableNumberOnly = tableNo.replace(/^table/i, "");
-  //   }
-
-  //   const now = Date.now();
-  //   const billId = now;
-  //   const groupID = tableNumberOnly; // set as per business logic
-  //   const captainTabId = "4zqeYYHPoEpQ6CADLgsI";
-  //   const serailNo = uuidv4().replace(/-/g, "").slice(0, 16); // Example serial number, unique
-  //   const userId = "bev6xlEqb8ZkaHs44S3KTRORDXu1"; // or your session/user data
-
-  //   // (1) Build billItems, kotList, etc. as shown in previous answer
-  //   const billItems = cart.map((item, idx) => ({
-  //     bags: 1.0,
-  //     barcode: "0",
-  //     billId,
-  //     canWeight: false,
-  //     categoryId: item.category || "",
-  //     cess: 0.0,
-  //     code: 2,
-  //     createdDate: 0,
-  //     discountAmount: 0.0,
-  //     discountPercent: 0.0,
-  //     duration: 0.0,
-  //     hsnCode: "0",
-  //     id: billId + idx + 1,
-  //     isKOTDone: true,
-  //     isOutOfStock: false,
-  //     kitchenId: "LiFtRL8L9ywkQ0xvE1yt",
-  //     mrpPrice: 0.0,
-  //     name: item.name,
-  //     percentage: 0.0,
-  //     price: item.price,
-  //     productId: item.id,
-  //     quantity: item.quantity,
-  //     regionalName: item.regionalName || "",
-  //     roomsDays: 0.0,
-  //     roomsFlag: false,
-  //     selected: true,
-  //     state: 0,
-  //     stockable: false,
-  //     taxIndex: 2,
-  //     total: item.price * item.quantity,
-  //     unitId: 0,
-  //     updatedDate: 0,
-  //     viewType: 0,
-  //     weightValue: 0.0,
-  //   }));
-
-  //   const kotList = [
-  //     {
-  //       dateTime: dayjs().format("MMM DD, YYYY h:mm:ss A"),
-  //       id: 1,
-  //       items: cart.map((item, idx) => ({
-  //         id: idx + 1,
-  //         itemName: item.name,
-  //         kotId: 1,
-  //         productId: item?.id,
-  //         quantity: item.quantity,
-  //         state: 0,
-  //       })),
-  //       kitchenId: "LiFtRL8L9ywkQ0xvE1yt",
-  //       serialNo: String(billId),
-  //       state: 0,
-  //       table: tableNo,
-  //       userId: 0,
-  //     },
-  //   ];
-
-  //   const total = cart.reduce(
-  //     (sum, item) => sum + item.price * item.quantity,
-  //     0
-  //   );
-  //   const taxAmount = Math.round(total * 0.05 * 10) / 10;
-  //   const finalTotal = total + taxAmount;
-
-  //   const tableDetailsObj = {
-  //     balance: finalTotal,
-  //     billItems,
-  //     billPrintCount: 0,
-  //     billType: premise,
-  //     captainTabId, // same as id
-  //     cashTenderAmt: 0.0,
-  //     cessAmount: 0.0,
-  //     changeAmt: 0.0,
-  //     checkInTime: billId,
-  //     checkOutTime: 0,
-  //     createdDate: billId,
-  //     customerBillAdvance: 0.0,
-  //     customerId: "",
-  //     days: 0,
-  //     discount: 0.0,
-  //     discountPercent: 0.0,
-  //     duration: 0.0,
-  //     estimate: false,
-  //     finalTotal: finalTotal,
-  //     gstFlag: false,
-  //     id: billId,
-  //     isKOTDone: true,
-  //     isSelected: true,
-  //     kotList,
-  //     noOfPerson: 0,
-  //     parcelCharges: 0.0,
-  //     paymentMode: 0,
-  //     percentage: 0.0,
-  //     roundOff: Math.round((finalTotal - Math.floor(finalTotal)) * 100) / 100,
-  //     serviceChargeAmount: 0.0,
-  //     serviceChargePercent: 0.0,
-  //     settled: false,
-  //     state: 1,
-  //     table: JSON.stringify([
-  //       {
-  //         table_no: tableNumberOnly?.toString(),
-  //         premise: premise,
-  //         premise_type: premiseType,
-  //         view_type: 0,
-  //         group_id: tableNumberOnly,
-  //         booked: true,
-  //         settled: false,
-  //       },
-  //     ]),
-  //     taxAmount: taxAmount,
-  //     taxState: 0,
-  //     total: total,
-  //     updatedDate: 0,
-  //     userId,
-  //     viewType: 2,
-  //   };
-
-  //   // (2) Build the Firestore document
-  //   const captainOrderDoc = {
-  //     flag: "input",
-  //     groupID: Number(groupID), // number
-  //     id: captainTabId, // string
-  //     serailNo, // string
-  //     tableDetails: JSON.stringify(tableDetailsObj), // Save as string
-  //   };
-
-  //   // (3) Save to Firestore "CAPTAIN_ORDER" subcollection
-  //   try {
-  //     const outletRef = doc(db, "OUTLET", outlet.id);
-  //     await addDoc(collection(outletRef, "CAPTAIN_ORDER"), captainOrderDoc);
-  //     dispatch(clearCart());
-  //     setLoading(false);
-  //     navigate(`/${outlet.id}/${tableNo}/order-success`);
-  //     // Optionally, clear cart, redirect, etc
-  //   } catch (error) {
-  //     setLoading(false);
-  //     console.error("Failed to place Captain Order:", error);
-  //     alert("Failed to place Captain Order. Please try again.");
-  //   }
-  // };
 
 
 
@@ -659,8 +698,8 @@ const externalOrderId = generateUniqueNumber(); // Example: "7834562190"
 
       <div className="fixed bottom-16 left-0 right-0 bg-white border-t p-4">
         <button
-          onClick={handlePlaceOrder}
-          // onClick={handleSaveCaptainOrder}
+          // onClick={handlePlaceOrder}
+          onClick={handleSaveCaptainOrder}
           disabled={!selectedMethod || loading}
           className={`w-full py-4 rounded-lg font-semibold text-lg flex items-center justify-center ${
             selectedMethod && !loading

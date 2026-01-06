@@ -87,7 +87,8 @@ export default function MenuPage() {
         // setProducts(prodList);
         const prodRef = query(
           collection(db, "OUTLET", outletId, "PRODUCT"),
-          where("onlineSynced", "==", false)
+          where("onlineSynced", "==", false),
+          where("type", "==", Number(0))
         );
 
         const prodSnap = await getDocs(prodRef);
@@ -96,7 +97,7 @@ export default function MenuPage() {
           id: doc.id,
           ...doc.data(),
         })) as MenuItem[];
-
+        console.log(prodList)
         setProducts(prodList);
       } catch (err) {
         console.error("Error fetching menu data:", err);
